@@ -1,5 +1,5 @@
-var verEnv = 'dev';
-// var verEnv = 'prod';
+// var verEnv = 'dev';
+var verEnv = 'prod';
 var blogs = [];
 var blogData = {};
 var themeData = {};
@@ -443,7 +443,7 @@ jQuery(function($) {
   function calTable2() {
     $('#table2').hide();
     $('#tableLoading').show();
-    $('#table h2').text('Details: Most current post age');
+    $('#table h2').text('Details: Themes');
     if (themeData.rows != undefined) {
       updateTable2($('#table2Filter1').val(), $('#table2Filter2').val(), $('#table2Filter3').val());
       console.log('themeDetails', themeData);
@@ -936,10 +936,10 @@ jQuery(function($) {
         conCountAll += conCount;
         siteCountAll += siteCount;
         adminCountAll += adminCount;
-        tr += '<tr><td></td><td><span>' + blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + formatNumber(authorCount) + '</td><td>' + formatNumber(subCount) + '</td><td>' + formatNumber(conCount) + '</td><td>' + formatNumber(siteCount) + '</td><td>' + formatNumber(adminCount) + '</td></tr>';
+        tr += '<tr><td><span>' + blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + formatNumber(authorCount) + '</td><td>' + formatNumber(subCount) + '</td><td>' + formatNumber(conCount) + '</td><td>' + formatNumber(siteCount) + '</td><td>' + formatNumber(adminCount) + '</td></tr>';
       }
       $('#table6 table').append(tr + '</tbody>');
-      var total = '<tbody><tr><td></td><td>Total = ' + formatNumber(totalCount) + '</td><td>' + formatNumber(authorCountAll) + '</td><td>' + formatNumber(subCountAll) + '</td><td>' + formatNumber(conCountAll) + '</td><td>' + formatNumber(siteCountAll) + '</td><td>' + formatNumber(adminCountAll) + '</td></tr></tbody>';
+      var total = '<tbody><tr><td>Total = ' + formatNumber(totalCount) + '</td><td>' + formatNumber(authorCountAll) + '</td><td>' + formatNumber(subCountAll) + '</td><td>' + formatNumber(conCountAll) + '</td><td>' + formatNumber(siteCountAll) + '</td><td>' + formatNumber(adminCountAll) + '</td></tr></tbody>';
       $('#table6 table').append(total);
       $('#table6 tbody tr td:nth-child(2)').click(function() {
         $(this).addClass('showBlogMenu');
