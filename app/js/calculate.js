@@ -1,5 +1,3 @@
-// var verEnv = 'dev';
-var verEnv = 'prod';
 var blogs = [];
 var blogData = {};
 var themeData = {};
@@ -189,8 +187,8 @@ jQuery(function($) {
     var activeCount = 0;
     var currentTime;
     for (i in blogs.rows) {
-	  standThe = standThe + blogs.rows[i].value.standThe;
-	  activeCount = activeCount + blogs.rows[i].value.activeCount;
+      standThe = standThe + blogs.rows[i].value.standThe;
+      activeCount = activeCount + blogs.rows[i].value.activeCount;
       if (i == blogs.rows.length - 1) {
         currentTime = blogs.rows[i].value.reportDate;
         var list = currentTime.split(' ');
@@ -217,7 +215,18 @@ jQuery(function($) {
     var disTime = nowDate.getTime();
     var disDayList = [];
     for (i in blogs.rows) {
-      var result = calTime(blogs.rows[i].value.mostCurDate, disTime);
+      var posts = blogs.rows[i].value.postDate;
+      var mostCurDate = '';
+      for (var j = 0; j < posts.length; j++) {
+        if (j === 0) {
+          mostCurDate = posts[0];
+        } else {
+          if (getTimeToTime(mostCurDate) < getTimeToTime(posts[j])) {
+            mostCurDate = posts[j];
+          }
+        };
+      };
+      var result = calTime(mostCurDate, disTime);
       if (result != -1) {
         disDayList.push(result);
       }
@@ -235,7 +244,7 @@ jQuery(function($) {
   function calPost() {
     var count = 0;
     for (i in blogs.rows) {
-		count = count+blogs.rows[i].value.count;
+      count = count + blogs.rows[i].value.count;
     };
 
     $('#card4 .cardValue').text(count + ' posts');
@@ -246,8 +255,8 @@ jQuery(function($) {
     var totalCount = 0;
     var activeCount = 0;
     for (i in blogs.rows) {
-			totalCount = totalCount + blogs.rows[i].value.pluginTotalCount;
-			activeCount = activeCount + blogs.rows[i].value.pluginActiveCount;
+      totalCount = totalCount + blogs.rows[i].value.pluginTotalCount;
+      activeCount = activeCount + blogs.rows[i].value.pluginActiveCount;
     }
     $('#card5 .cardValue').text(getPercent(activeCount, totalCount) + ' plug-ins');
   }
@@ -557,8 +566,20 @@ jQuery(function($) {
       var disTime = nowDate.getTime();
       for (i in blogs.rows) {
         var blogName = blogs.rows[i].value.blogName;
-        var result = calTime(blogs.rows[i].value.mostCurDate, disTime);
+        var posts = blogs.rows[i].value.postDate;
+        var mostCurDate = '';
+        for (var j = 0; j < posts.length; j++) {
+          if (j === 0) {
+            mostCurDate = posts[0];
+          } else {
+            if (getTimeToTime(mostCurDate) < getTimeToTime(posts[j])) {
+              mostCurDate = posts[j];
+            }
+          };
+        };
+        var result = calTime(mostCurDate, disTime);
         tr += '<tr><td>' + blogName + '<a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + formatNumber(result) + '</td></tr>';
+
       };
       $('#table3 table').append(tr + '</tbody>');
       $('#table3 tbody tr td:nth-child(1)').click(function() {
@@ -612,12 +633,12 @@ jQuery(function($) {
         var countyear = 0;
         var counttotal = 0;
 
-		count7 = blogs.rows[i].value.postValue.count7;
-		count30 = blogs.rows[i].value.postValue.count30;
-		count90 = blogs.rows[i].value.postValue.count90;
-		countyear = blogs.rows[i].value.postValue.countyear;
-		counttotal = blogs.rows[i].value.postValue.counttotal;
-		
+        count7 = blogs.rows[i].value.postValue.count7;
+        count30 = blogs.rows[i].value.postValue.count30;
+        count90 = blogs.rows[i].value.postValue.count90;
+        countyear = blogs.rows[i].value.postValue.countyear;
+        counttotal = blogs.rows[i].value.postValue.counttotal;
+
         total7 += count7;
         total30 += count30;
         total90 += count90;
@@ -1049,115 +1070,30 @@ jQuery(function($) {
         loadFailed();
       }
     });
-    if (verEnv === 'dev') {
-      var result = [
-        ["/?s=Watson&lnk=mhsrch&v=18&en=utf&lang=en&cc=us", "1"],
-        ["/?s=digital", "1"],
-        ["/?s=digital+certificate+authority&lnk=mhsrch&v=18&en=utf&lang=en&cc=us", "1"],
-        ["/analytics-zone/", "2738"],
-        ["/azami/", "204"],
-        ["/ba-support-link/", "1511"],
-        ["/base-and-solve/", "1156"],
-        ["/beyond-the-wallet-entering-a-world-of-frictionless-commerce/", "12"],
-        ["/blog-owner-support/", "24"],
-        ["/bluemix/", "34143"],
-        ["/brexit/", "258"],
-        ["/brki/", "1172"],
-        ["/business-insight/", "65"],
-        ["/business-partner-blog/", "239"],
-        ["/business-transformation-news/", "31"],
-        ["/citizen-ibm/", "4091"],
-        ["/client-voices/", "30"],
-        ["/cloud-and-information-management/", "1"],
-        ["/cloud-computing/", "42445"],
-        ["/commerce/", "47485"],
-        ["/criqueliere/", "21"],
-        ["/cross-selling/", "113"],
-        ["/data-protection-retention/", "38"],
-        ["/digital-devops/", "1266"],
-        ["/digital-marketing/", "1"],
-        ["/dmexco-gave-lots-of-ingredients-but-whats-the-digital-marketing-recipe/", "1"],
-        ["/ecm/", "4968"],
-        ["/emerging-technology/", "1590"],
-        ["/energy-utilities-solution-architects/", "25"],
-        ["/engagement/", "112"],
-        ["/fulhamfc/", "45"],
-        ["/game-changers/", "136"],
-        ["/gbs-fi-content/", "45"],
-        ["/how-emotional-engagement-can-be-used-to-increase-customer-loyalty/", "1"],
-        ["/ianlsblog/", "17"],
-        ["/ibm-social-software/", "208"],
-        ["/ibm-training/", "3190"],
-        ["/insights-on-business/", "19731"],
-        ["/internet-of-things/", "29054"],
-        ["/ip-management/", "54"],
-        ["/jikimari/", "18"],
-        ["/kamoshi/", "275"],
-        ["/lacafe/", "6"],
-        ["/latinos/", "33385"],
-        ["/linux-at-ibm/", "24"],
-        ["/nezcc/", "41"],
-        ["/nordic-msp/", "818"],
-        ["/pachi/", "2789"],
-        ["/peppol-by-ibm/", "371"],
-        ["/performance/", "67"],
-        ["/pro-vision/", "3299"],
-        ["/psirt/", "10880"],
-        ["/robertoa/", "2756"],
-        ["/sejasocial/", "24"],
-        ["/smarter-workforce/", "4544"],
-        ["/sweeden/", "1588"],
-        ["/systems", "6"],
-        ["/systems-MU/", "104"],
-        ["/systems-nordic/", "397"],
-        ["/systems/", "40538"],
-        ["/tech-content/", "153"],
-        ["/think-leaders", "1"],
-        ["/think-leaders/", "5382"],
-        ["/think/", "1186"],
-        ["/tokyo-soc/", "1078"],
-        ["/transformacion/", "102"],
-        ["/watson-health/", "1613"],
-        ["/watson-hub/", "95"],
-        ["/watson/", "3"],
-        ["/websphere-commerce/", "198"]
-      ];
-      googleResults = {};
-      for (i in result) {
-        var value = result[i][0].split('/');
-        var key = '';
-        var num = '';
-        if (value.length === 3) {
-          key = value[1];
-          num = result[i][1];
-          googleResults[key] = formatNumber(num);
-        }
-      };
-    } else {
-      $.ajax({
-        url: "/googleAnalytics?version=" + currentVersion,
-        success: function(result) {
-          console.log('googleAnalytics', result);
-          googleResults = {};
-          for (i in result) {
-            var value = result[i][0].split('/');
-            var key = '';
-            var num = '';
-            if (value.length === 3) {
-              key = value[1];
-              num = result[i][1];
-              googleResults[key] = formatNumber(num);
-            }
-          };
-          loadSuccess();
-        },
-        error: function(err) {
-          console.error('googleAnalytics', err);
-          googleResults = 'error';
-          loadFailed();
-        }
-      });
-    }
+
+    $.ajax({
+      url: "/googleAnalytics?version=" + currentVersion,
+      success: function(result) {
+        console.log('googleAnalytics', result);
+        googleResults = {};
+        for (i in result) {
+          var value = result[i][0].split('/');
+          var key = '';
+          var num = '';
+          if (value.length === 3) {
+            key = value[1];
+            num = result[i][1];
+            googleResults[key] = formatNumber(num);
+          }
+        };
+        loadSuccess();
+      },
+      error: function(err) {
+        console.error('googleAnalytics', err);
+        googleResults = 'error';
+        loadFailed();
+      }
+    });
   }
 
   function loadSuccess() {
