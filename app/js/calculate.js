@@ -563,7 +563,7 @@ jQuery(function($) {
       blogMenu(name, top, left);
     });
 
-    $('#table2 table').DataTable({
+    var table = $('#table2 table').DataTable({
       "scrollY": '51vh',
       "scrollX": false,
       "iDisplayLength": 25,
@@ -580,6 +580,16 @@ jQuery(function($) {
         [1, 'asc']
       ]
     });
+
+
+    $('#table2 table th:nth-child(1) input').on('click', function() {
+      if ($(this).prop('checked')) {
+        table.rows().select();
+      } else {
+        table.rows().deselect();
+      }
+    });
+
   }
 
   // 3th Table
@@ -770,7 +780,6 @@ jQuery(function($) {
         }
       })
     }
-
 
 
     function updateFilter5() {
