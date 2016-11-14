@@ -225,7 +225,9 @@ jQuery(function($) {
       totalDay += disDayList[i];
     }
     var result = totalDay / disDayList.length + '';
-    result = result.substr(0, result.indexOf('.'))
+    if (result.indexOf('.') != -1){
+        result = result.substr(0, result.indexOf('.'))
+    }
     $('#card3 .cardValue').text(result + ' days');
   }
 
