@@ -434,7 +434,7 @@ table img.wrong {
 }
 
 #table1 tbody tr td:nth-child(1),
-#table2 tbody tr td:nth-child(1),
+#table2 tbody tr td:nth-child(2),
 #table3 tbody tr td:nth-child(1),
 #table4 tbody tr td:nth-child(1),
 #table6 tbody tr td:nth-child(1) {
@@ -444,7 +444,7 @@ table img.wrong {
 }
 
 #table1 tbody tr td:nth-child(1):hover,
-#table2 tbody tr td:nth-child(1):hover,
+#table2 tbody tr td:nth-child(2):hover,
 #table3 tbody tr td:nth-child(1):hover,
 #table4 tbody tr td:nth-child(1):hover,
 #table6 tbody tr td:nth-child(1):hover {
@@ -457,6 +457,10 @@ table img.wrong {
 #table1 thead th {
   white-space: normal;
   vertical-align: middle;
+}
+
+#table1 tbody tr td:nth-child(1){
+    max-width: 260px;
 }
 
 #table1 tbody tr td:nth-child(4),
@@ -490,11 +494,11 @@ table img.wrong {
 
 /*table2*/
 
-#table2 tbody tr td:nth-child(3),
 #table2 tbody tr td:nth-child(4),
 #table2 tbody tr td:nth-child(5),
 #table2 tbody tr td:nth-child(6),
-#table2 tbody tr td:nth-child(7) {
+#table2 tbody tr td:nth-child(7),
+#table2 tbody tr td:nth-child(8) {
   text-align: center;
 }
 

@@ -519,27 +519,49 @@ jQuery(function($) {
         if (ifStardard && ifCurrent) {
           bothCount++;
         }
-        tr += '<tr><td><span>' + blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + theme.themeName + '</td><td>' + theme.themeVersion + '</td><td>' + (ifActive ? rImg : wImg) + '</td><td>' + (ifStardard ? rImg : wImg) + '</td><td>' + (ifCurrent ? rImg : wImg) + '</td><td>' + (ifStardard && ifCurrent ? rImg : wImg) + '</td></tr>';
+        tr += '<tr><td></td><td><span>' + blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + theme.themeName + '</td><td>' + theme.themeVersion + '</td><td>' + (ifActive ? rImg : wImg) + '</td><td>' + (ifStardard ? rImg : wImg) + '</td><td>' + (ifCurrent ? rImg : wImg) + '</td><td>' + (ifStardard && ifCurrent ? rImg : wImg) + '</td></tr>';
       }
     }
     $('#table2 table').append(tr + '</tbody>');
 
-    var total = '<tbody><tr><td>Total = ' + formatNumber(totalCount) + '</td><td></td><td></td><td>' + formatNumber(activeCount) + '</td><td>' + formatNumber(standCount) + '</td><td>' + formatNumber(currentCount) + '</td><td>' + formatNumber(bothCount) + '</td></tr><tr><td>% of overall total</td><td></td><td></td><td>' + getPercent(activeCount, totalCount) + '</td><td>' + getPercent(standCount, totalCount) + '</td><td>' + getPercent(currentCount, totalCount) + '</td><td>' + getPercent(bothCount, totalCount) + '</td></tr></tbody>';
+    var total = '<tbody><tr><td></td><td>Total = ' + formatNumber(totalCount) + '</td><td></td><td></td><td>' + formatNumber(activeCount) + '</td><td>' + formatNumber(standCount) + '</td><td>' + formatNumber(currentCount) + '</td><td>' + formatNumber(bothCount) + '</td></tr><tr><td></td><td>% of overall total</td><td></td><td></td><td>' + getPercent(activeCount, totalCount) + '</td><td>' + getPercent(standCount, totalCount) + '</td><td>' + getPercent(currentCount, totalCount) + '</td><td>' + getPercent(bothCount, totalCount) + '</td></tr></tbody>';
     $('#table2 table').append(total);
 
-    $('#table2 tbody tr td:nth-child(1)').click(function() {
+    $('#table2 tbody tr td:nth-child(2)').click(function() {
       $(this).addClass('showBlogMenu');
-      var name = $(this).parent().children()[0].innerText;
+      var name = $(this).parent().children()[1].innerText;
       var top = $(this).offset().top;
       var left = $(this).offset().left;
       blogMenu(name, top, left);
     });
 
-    $('#table2 table').DataTable({
+    var table = $('#table2 table').DataTable({
       "scrollY": '51vh',
       "scrollX": false,
-      "iDisplayLength": 25
+      "iDisplayLength": 25,
+      columnDefs: [{
+        orderable: false,
+        className: 'select-checkbox',
+        targets: 0
+      }],
+      select: {
+        style: 'multi+shift',
+        selector: 'td:first-child'
+      },
+      order: [
+        [1, 'asc']
+      ]
     });
+
+
+    $('#table2 table th:nth-child(1) input').on('click', function() {
+      if ($(this).prop('checked')) {
+        table.rows().select();
+      } else {
+        table.rows().deselect();
+      }
+    });
+
   }
 
   // 3th Table
@@ -721,7 +743,6 @@ jQuery(function($) {
         }
       })
     }
-
 
 
     function updateFilter5() {
@@ -915,18 +936,6 @@ jQuery(function($) {
         "iDisplayLength": 25,
         "scrollY": '51vh',
         "scrollX": false,
-        columnDefs: [{
-          orderable: false,
-          className: 'select-checkbox',
-          targets: 0
-        }],
-        select: {
-          style: 'multi+shift',
-          selector: 'td:first-child'
-        },
-        order: [
-          [1, 'asc']
-        ]
       });
     }
   }
