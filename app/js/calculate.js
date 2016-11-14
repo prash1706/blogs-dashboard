@@ -215,18 +215,7 @@ jQuery(function($) {
     var disTime = nowDate.getTime();
     var disDayList = [];
     for (i in blogs.rows) {
-      var posts = blogs.rows[i].value.postDate;
-      var mostCurDate = '';
-      for (var j = 0; j < posts.length; j++) {
-        if (j === 0) {
-          mostCurDate = posts[0];
-        } else {
-          if (getTimeToTime(mostCurDate) < getTimeToTime(posts[j])) {
-            mostCurDate = posts[j];
-          }
-        };
-      };
-      var result = calTime(mostCurDate, disTime);
+      var result = calTime(blogs.rows[i].value.mostCurDate, disTime);
       if (result != -1) {
         disDayList.push(result);
       }
@@ -588,18 +577,7 @@ jQuery(function($) {
       var disTime = nowDate.getTime();
       for (i in blogs.rows) {
         var blogName = blogs.rows[i].value.blogName;
-        var posts = blogs.rows[i].value.postDate;
-        var mostCurDate = '';
-        for (var j = 0; j < posts.length; j++) {
-          if (j === 0) {
-            mostCurDate = posts[0];
-          } else {
-            if (getTimeToTime(mostCurDate) < getTimeToTime(posts[j])) {
-              mostCurDate = posts[j];
-            }
-          };
-        };
-        var result = calTime(mostCurDate, disTime);
+        var result = calTime(blogs.rows[i].value.mostCurDate, disTime);
         tr += '<tr><td>' + blogName + '<a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + formatNumber(result) + '</td></tr>';
 
       };
@@ -964,11 +942,11 @@ jQuery(function($) {
             $('#table7 table').DataTable().search('').draw();
             $('#tableLoading').hide();
           }
-          console.log('tableDetails', pageData);
+          console.log('pageDetails', pageData);
         },
         error: function(error) {
           pageData = [];
-          console.error('tableDetails Error', error);
+          console.error('pageDetails Error', error);
         }
       })
     }

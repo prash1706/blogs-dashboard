@@ -7,17 +7,6 @@ var googleAuth = require('google-oauth-jwt');
 var googleRequest = require('google-oauth-jwt').requestWithJWT();
 var dateFormat = require('dateformat');
 
-router.get('/tableDetails', function(req, res) {
-  db = cloudant.db.use(cloudant.DBName);
-  db.view('blogs', 'tableDetails', function(err, body) {
-    if (err) {
-      console.error(err);
-      res.status(401).send(err);
-    } else {
-      res.send(body);
-    };
-  });
-});
 
 router.get('/dashBoard', function(req, res) {
   if (req.query.version === 'prod') {
@@ -26,7 +15,7 @@ router.get('/dashBoard', function(req, res) {
     cloudant.useDev();
   }
   db = cloudant.db.use(cloudant.DBName);
-  db.view('blogs', 'dashBoard', function(err, body) {
+  db.view('blogs', 'dashBoardCards', function(err, body) {
     if (err) {
       console.error(err);
       res.status(401).send(err);
