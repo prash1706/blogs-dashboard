@@ -315,13 +315,13 @@ function eachBlog(blogName, envType, dbType) {
   });
 };
 
-var prodWeeklyHistoryData = schedule.scheduleJob({ hour: 23, minute: 15 }, function() {
+var prodWeeklyHistoryData = schedule.scheduleJob({ hour: 23, minute: 15, dayOfWeek: 0 }, function() {
   dbType = cloudant.db.use(cloudant.DBNamePrdJob);
   var envType = "Prod";
   prodAndPreWeeklyHistoryData(dbType, envType);
 });
 
-var preWeeklyHistoryData = schedule.scheduleJob({ hour: 23, minute: 20 }, function() {
+var preWeeklyHistoryData = schedule.scheduleJob({ hour: 23, minute: 20, dayOfWeek: 0 }, function() {
   dbType = cloudant.db.use(cloudant.DBNamePreJob);
   var envType = "Pre";
   prodAndPreWeeklyHistoryData(dbType, envType);

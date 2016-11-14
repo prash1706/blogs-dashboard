@@ -189,16 +189,8 @@ jQuery(function($) {
     var activeCount = 0;
     var currentTime;
     for (i in blogs.rows) {
-      var themes = blogs.rows[i].value.themeDetails;
-      for (j in themes) {
-        if ((themes[j].themeName === 'ibmNorthstar' || themes[j].themeName === 'ibmNorthstarLST') && (themes[j].version.substr(0, 3) === '1.6') && themes[j].status === 'active') {
-          standThe++;
-        }
-        if (themes[j].status === 'active') {
-          ifActive = true;
-          activeCount++;
-        }
-      }
+	  standThe = standThe + blogs.rows[i].value.standThe;
+	  activeCount = activeCount + blogs.rows[i].value.activeCount;
       if (i == blogs.rows.length - 1) {
         currentTime = blogs.rows[i].value.reportDate;
         var list = currentTime.split(' ');
@@ -225,18 +217,7 @@ jQuery(function($) {
     var disTime = nowDate.getTime();
     var disDayList = [];
     for (i in blogs.rows) {
-      var posts = blogs.rows[i].value.postDate;
-      var mostCurDate = '';
-      for (var j = 0; j < posts.length; j++) {
-        if (j === 0) {
-          mostCurDate = posts[0];
-        } else {
-          if (getTimeToTime(mostCurDate) < getTimeToTime(posts[j])) {
-            mostCurDate = posts[j];
-          }
-        };
-      };
-      var result = calTime(mostCurDate, disTime);
+      var result = calTime(blogs.rows[i].value.mostCurDate, disTime);
       if (result != -1) {
         disDayList.push(result);
       }
@@ -253,21 +234,8 @@ jQuery(function($) {
   // 4th Card
   function calPost() {
     var count = 0;
-    var nowTime = new Date();
-    var nowDate = new Date(nowTime.getFullYear(), nowTime.getMonth(), nowTime.getDate(), 0, 0, 0);
-    var disTime = nowDate.getTime();
-    var maxTime = disTime - (nowTime.getDay() + 1) * (1000 * 60 * 60 * 24);
-    var minTime = disTime - (nowTime.getDay() + 8) * (1000 * 60 * 60 * 24);
     for (i in blogs.rows) {
-      var posts = blogs.rows[i].value.postDate;
-      for (j in posts) {
-        var postTime = getTimeToTime(posts[j]);
-        if (postTime !== undefined) {
-          if (postTime <= maxTime && postTime >= minTime) {
-            count++;
-          }
-        }
-      }
+		count = count+blogs.rows[i].value.count;
     };
 
     $('#card4 .cardValue').text(count + ' posts');
@@ -278,13 +246,8 @@ jQuery(function($) {
     var totalCount = 0;
     var activeCount = 0;
     for (i in blogs.rows) {
-      var plugins = blogs.rows[i].value.pluginDetails;
-      for (j in plugins) {
-        totalCount++;
-        if (plugins[j].status === "active") {
-          activeCount++;
-        }
-      }
+			totalCount = totalCount + blogs.rows[i].value.pluginTotalCount;
+			activeCount = activeCount + blogs.rows[i].value.pluginActiveCount;
     }
     $('#card5 .cardValue').text(getPercent(activeCount, totalCount) + ' plug-ins');
   }
@@ -594,18 +557,7 @@ jQuery(function($) {
       var disTime = nowDate.getTime();
       for (i in blogs.rows) {
         var blogName = blogs.rows[i].value.blogName;
-        var posts = blogs.rows[i].value.postDate;
-        var mostCurDate = '';
-        for (var j = 0; j < posts.length; j++) {
-          if (j === 0) {
-            mostCurDate = posts[0];
-          } else {
-            if (getTimeToTime(mostCurDate) < getTimeToTime(posts[j])) {
-              mostCurDate = posts[j];
-            }
-          };
-        };
-        var result = calTime(mostCurDate, disTime);
+        var result = calTime(blogs.rows[i].value.mostCurDate, disTime);
         tr += '<tr><td>' + blogName + '<a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + formatNumber(result) + '</td></tr>';
       };
       $('#table3 table').append(tr + '</tbody>');
@@ -654,28 +606,18 @@ jQuery(function($) {
       var disTime = nowDate.getTime();
       for (i in blogs.rows) {
         var blogName = blogs.rows[i].value.blogName;
-        var posts = blogs.rows[i].value.postDate;
         var count7 = 0;
         var count30 = 0;
         var count90 = 0;
         var countyear = 0;
         var counttotal = 0;
-        for (j in posts) {
-          var dayCount = calTime(posts[j], disTime);
-          counttotal++;
-          if (dayCount <= 7) {
-            count7++;
-          }
-          if (dayCount <= 30) {
-            count30++;
-          }
-          if (dayCount <= 90) {
-            count90++;
-          }
-          if (dayCount <= 365) {
-            countyear++;
-          }
-        };
+
+		count7 = blogs.rows[i].value.postValue.count7;
+		count30 = blogs.rows[i].value.postValue.count30;
+		count90 = blogs.rows[i].value.postValue.count90;
+		countyear = blogs.rows[i].value.postValue.countyear;
+		counttotal = blogs.rows[i].value.postValue.counttotal;
+		
         total7 += count7;
         total30 += count30;
         total90 += count90;
