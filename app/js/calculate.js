@@ -350,37 +350,13 @@ jQuery(function($) {
       if (filterLanguage !== 'all' && blog.language !== filterLanguage) {
         continue;
       }
-      var oldPost = 0;
-      var newPost = 0;
-      var halfYearCount = 0;
-      var postCount = blog.postDetails.length;
       var owner = blog.owner == undefined ? '' : blog.owner;
       var country = blog.country == undefined ? '' : blog.country;
       var language = blog.language == undefined ? '' : blog.language;
       var mu = blog.mu == undefined ? '' : blog.mu;
-      var halfYearTime = new Date();
-      halfYearTime.setMonth(halfYearTime.getMonth() - 6);
-      if (blog.totalPosts > 0) {
-        newPost = getTimeToTime(blog.postDetails[0].postDate);
-        oldPost = getTimeToTime(blog.postDetails[blog.totalPosts - 1].postDate);
-      } else {
-        oldPost = "";
-        newPost = "";
-      }
-      for (j in blog.postDetails) {
-        var post = blog.postDetails[j];
-        var postTime = getTimeToTime(post.postDate);
-        if (halfYearTime <= postTime) {
-          halfYearCount++;
-        }
-        if (oldPost > postTime) {
-          oldPost = postTime;
-        }
-        if (newPost < postTime) {
-          newPost = postTime
-        }
-      }
-      tr += '<tr><td><span>' + blog.blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + formatNumber(blog.totalPosts) + '</td><td>' + formatNumber(halfYearCount) + '</td><td>' + getTimeToDate2(oldPost) + '</td><td>' + getTimeToDate2(newPost) + '</td><td>' + (googleResults[blog.blogName] === undefined ? "" : googleResults[blog.blogName]) + '</td><td title="' + owner + '">' + owner + '</td><td>' + ((country === "" && language === "") ? "" : (country + '/' + language)) + '</td><td>' + mu + '</td><td></td></tr>';
+	  var oldPost = getTimeToTime(blog.oldPost);
+	  var newPost = getTimeToTime(blog.newPost);	  
+      tr += '<tr><td><span>' + blog.blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + formatNumber(blog.totalPosts) + '</td><td>' + formatNumber(blog.halfYearCount) + '</td><td>' + getTimeToDate2(oldPost) + '</td><td>' + getTimeToDate2(newPost) + '</td><td>' + (googleResults[blog.blogName] === undefined ? "" : googleResults[blog.blogName]) + '</td><td title="' + owner + '">' + owner + '</td><td>' + ((country === "" && language === "") ? "" : (country + '/' + language)) + '</td><td>' + mu + '</td><td></td></tr>';
     }
     $('#table1 table').append(tr + '</tbody>');
     $('#table1 tbody tr td:nth-child(1)').click(function() {
@@ -873,28 +849,15 @@ jQuery(function($) {
       var siteCountAll = 0;
       var adminCountAll = 0;
       for (i in userData.rows) {
-        var blog = userData.rows[i].value.usersDetials;
         var blogName = userData.rows[i].value.blogName;
-        var authorCount = 0;
-        var subCount = 0;
-        var conCount = 0;
-        var siteCount = 0;
-        var adminCount = 0;
-        for (j in blog) {
-          var user = blog[j];
-          totalCount++;
-          if (user.usersRole === 'site_owner') {
-            siteCount++;
-          } else if (user.usersRole === 'administrator') {
-            adminCount++;
-          } else if (user.usersRole === 'author') {
-            authorCount++;
-          } else if (user.usersRole === 'editor') {
-            conCount++;
-          } else if (user.usersRole === 'subscriber') {
-            subCount++;
-          }
-        };
+		var blog = userData.rows[i].value;
+		totalCount += blog.totalCount;
+		var authorCount = blog.authorCount;
+		var subCount = blog.subCount;
+		var conCount = blog.conCount;
+		var siteCount = blog.siteCount;
+		var adminCount = blog.adminCount;
+		
         authorCountAll += authorCount;
         subCountAll += subCount;
         conCountAll += conCount;
@@ -905,7 +868,7 @@ jQuery(function($) {
       $('#table6 table').append(tr + '</tbody>');
       var total = '<tbody><tr><td>Total = ' + formatNumber(totalCount) + '</td><td>' + formatNumber(authorCountAll) + '</td><td>' + formatNumber(subCountAll) + '</td><td>' + formatNumber(conCountAll) + '</td><td>' + formatNumber(siteCountAll) + '</td><td>' + formatNumber(adminCountAll) + '</td></tr></tbody>';
       $('#table6 table').append(total);
-      $('#table6 tbody tr td:nth-child(2)').click(function() {
+      $('#table6 tbody tr td:nth-child(1)').click(function() {
         $(this).addClass('showBlogMenu');
         var name = $(this).parent().children()[0].innerText;
         var top = $(this).offset().top;

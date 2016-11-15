@@ -392,14 +392,13 @@ var preWeeklyHistoryData = schedule.scheduleJob({ hour: 23, minute: 20, dayOfWee
 
 
 function prodAndPreWeeklyHistoryData(dbType, envType) {
-  dbType.view('blogs', 'dashBoard', function(err, body) {
+  dbType.view('blogs', 'dashBoardCards', function(err, body) {
     if (err) {
       console.error("Error in fetching getDataForHistory" + err);
     } else {
       var blogs = body;
       var count = blogs.total_rows;
       var standThe = 0,
-        activeCount = 0,
         postCount = 0,
         nowTime = new Date(),
         disDayList = [],
@@ -411,52 +410,30 @@ function prodAndPreWeeklyHistoryData(dbType, envType) {
         totalDay = 0;
       var nowDate = new Date(nowTime.getFullYear(), nowTime.getMonth(), nowTime.getDate(), 0, 0, 0);
       var disTime = nowDate.getTime();
-      var maxTime = disTime - (nowTime.getDay() + 1) * (1000 * 60 * 60 * 24);
-      var minTime = disTime - (nowTime.getDay() + 8) * (1000 * 60 * 60 * 24);
       var blogCount = blogs.rows.length;
-
+	  var standThe = 0;
+	  var activeCount = 0;
       for (i in blogs.rows) {
         var themes = blogs.rows[i].value.themeDetails,
           posts = blogs.rows[i].value.postDate,
           mostCurDate = '',
           plugins = blogs.rows[i].value.pluginDetails,
           users = blogs.rows[i].value.users;
-        for (j in themes) {
-          if ((themes[j].themeName === 'ibmNorthstar' || themes[j].themeName === 'ibmNorthstarLST') && (themes[j].version.substr(0, 3) === '1.6') && themes[j].status === 'active') {
-            standThe++;
-          }
-          if (themes[j].status === 'active') {
-            ifActive = true;
-            activeCount++;
-          }
-        }
-        for (var j = 0; j < posts.length; j++) {
-          if (j === 0) {
-            mostCurDate = posts[0];
-          } else {
-            if (getTimeToTime(mostCurDate) < getTimeToTime(posts[j])) {
-              mostCurDate = posts[j];
-            }
-          };
-        };
-        var result = calTime(mostCurDate, disTime);
-        if (result != -1) {
-          disDayList.push(result);
-        }
-        for (j in posts) {
-          var postTime = getTimeToTime(posts[j]);
-          if (postTime !== undefined) {
-            if (postTime <= maxTime && postTime >= minTime) {
-              postCount++;
-            }
-          }
-        }
-        for (j in plugins) {
-          totalCount++;
-          if (plugins[j].status === "active") {
-            activeCount1++;
-          }
-        }
+		  
+		  standThe = standThe + blogs.rows[i].value.standThe;
+		  activeCount = activeCount + blogs.rows[i].value.activeCount;
+		  
+
+		var result = calTime(blogs.rows[i].value.mostCurDate, disTime);
+		if (result != -1) {
+        disDayList.push(result);
+		}
+		
+		postCount = postCount + blogs.rows[i].value.count;
+		
+		totalCount = totalCount + blogs.rows[i].value.pluginTotalCount;
+		activeCount1 = activeCount1 + blogs.rows[i].value.pluginActiveCount;
+		
         for (j in users) {
           if (userList.indexOf(users[j].usersEmail) === -1) {
             userList.push(users[j].usersEmail);
@@ -467,14 +444,15 @@ function prodAndPreWeeklyHistoryData(dbType, envType) {
         pageCount += blogs.rows[i].value.pageCount;
       };
 
-      var stdCurrent = getPercent(standThe, activeCount)
+      var stdCurrent = getPercent(standThe, activeCount);
       for (i in disDayList) {
         totalDay += disDayList[i];
       }
       var result = totalDay / disDayList.length + '';
-      result = result.substr(0, result.indexOf('.'))
+      result = result.substr(0, result.indexOf('.'));
       var plugins = getPercent(activeCount1, totalCount)
       var pagesValue = getPercent2(pageCount, blogCount);
+	  
       var doc = {
         _id: "week_" + envType + "_" + dateFormat(nowTime, "dd_mm_yyyy"),
         type: "weekly" + envType + "History",
@@ -511,20 +489,6 @@ function getPercent(num1, num2) {
   }
 }
 
-function getTimeToTime(date) {
-  var dateC = date.match(/^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/);
-  if (dateC) {
-    var dateC = new Date(parseInt(dateC[1], 10),
-      parseInt(dateC[2], 10) - 1,
-      parseInt(dateC[3], 10),
-      parseInt(dateC[4], 10),
-      parseInt(dateC[5], 10),
-      parseInt(dateC[6], 10));
-    return dateC.getTime();
-  } else {
-    return undefined;
-  }
-}
 
 function calTime(date, disTime) {
   var dateC = getTimeToDate(date);
