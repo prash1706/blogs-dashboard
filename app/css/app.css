@@ -459,8 +459,8 @@ table img.wrong {
   vertical-align: middle;
 }
 
-#table1 tbody tr td:nth-child(1){
-    max-width: 260px;
+#table1 tbody tr td:nth-child(1) {
+  max-width: 260px;
 }
 
 #table1 tbody tr td:nth-child(4),
@@ -508,6 +508,12 @@ table img.wrong {
 
 #table2FilterForm select {
   width: 20%;
+}
+
+#table2 p.emailUsers {
+  position: absolute;
+  left: 720px;
+  top: -50px;
 }
 
 
@@ -792,6 +798,35 @@ div.tableDivChild.showThisTableFilter div.tableDivFilter div.filterSwitch a:nth-
   width: 200px;
 }
 
+#emailUsersPopup {
+  position: absolute;
+  padding-top: 30px;
+  padding-left: 10px;
+  z-index: 3;
+  display: none;
+}
+
+#emailUsersPopup>div {
+  background-color: white;
+  border: 1px black solid;
+  width: 200px;
+  padding: 10px;
+}
+
+#emailUsersPopup>div>p:nth-child(1){
+  padding-bottom: 2px;
+}
+
+#emailUsersPopup>div>p:nth-child(2){
+  margin-top: 10px;
+}
+
+
+#speRolesPopupGroup {
+  display: none;
+  padding-left: 20px;
+  font-size: 0.9em;
+}
 #rawData {
   display: none;
   position: fixed;
@@ -850,8 +885,8 @@ div.tableDivChild.showThisTableFilter div.tableDivFilter div.filterSwitch a:nth-
 }
 
 #jsonRawDataArea {
-    height: 560px;
-    overflow: scroll;
+  height: 560px;
+  overflow: scroll;
 }
 
 #loadingMockup {
