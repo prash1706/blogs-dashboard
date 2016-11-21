@@ -510,6 +510,22 @@ table img.wrong {
   width: 20%;
 }
 
+#table2FilterForm p.ibm-form-elem-grp span.select2.select2-container.select2-container--default:nth-child(3){
+  margin-right: -5px;
+}
+
+#table2FilterForm p.ibm-form-elem-grp span.select2.select2-container.select2-container--default:nth-child(5){
+  margin-right: 20px;
+}
+
+#table2FilterForm p.ibm-form-elem-grp span.select2.select2-container.select2-container--default:nth-child(7){
+  margin-right: -5px;
+}
+
+#table2FilterForm p.ibm-form-elem-grp span.select2.select2-container.select2-container--default:nth-child(9){
+  margin-right: 20px;
+}
+
 #table2 p.emailUsers {
   position: absolute;
   left: 720px;
@@ -826,6 +842,11 @@ div.tableDivChild.showThisTableFilter div.tableDivFilter div.filterSwitch a:nth-
   display: none;
   padding-left: 20px;
   font-size: 0.9em;
+}
+
+#copyEmailBtn.disabled{
+  pointer-events: none;
+  color: #777677;
 }
 #rawData {
   display: none;

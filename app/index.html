@@ -45,14 +45,15 @@
   <link rel="stylesheet" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="//cdn.datatables.net/select/1.2.0/css/select.dataTables.min.css">
   <link rel="stylesheet" href="css/app.css">
-  <script src="js/jquery.min.js"></script>
+  <script src="js/lib/jquery.min.js"></script>
   <script src="//1.www.s81c.com/common/stats/ida_stats.js"></script>
   <script src="//1.www.s81c.com/common/v18/js/www.js"></script>
   <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
   <script src="//cdn.datatables.net/select/1.2.0/js/dataTables.select.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-  <script src="js/date-dd-MMM-yyyy.js"></script>
-  <script src="js/bundle.js"></script>
+  <script src="js/lib/date-dd-MMM-yyyy.js"></script>
+  <script src="js/lib/bundle.js"></script>
+  <script src="js/lib/clipboard.min.js"></script>
   <script>
   IBMCore.common.util.config.set({
     masthead: {
@@ -262,13 +263,21 @@
                 <form id="table2FilterForm" class="ibm-column-form" method="post">
                   <p class="ibm-form-elem-grp">
                     <label>Filter by:</label>
-                    <select id="table2Filter1" class="table2Filter" data-width="30%">
+                    <select id="table2FilterOp1" class="table2Filter" data-width="5%">
+                      <option value="equal" selected>=</option>
+                      <option value="notequal">≠</option>
+                    </select>
+                    <select id="table2Filter1" class="table2Filter" data-width="20%">
                       <option value="all" selected>Theme (all)</option>
                     </select>
-                    <select id="table2Filter2" class="table2Filter" data-width="30%">
+                    <select id="table2FilterOp2" class="table2Filter" data-width="5%">
+                      <option value="equal" selected>=</option>
+                      <option value="notequal">≠</option>
+                    </select>
+                    <select id="table2Filter2" class="table2Filter" data-width="20%">
                       <option value="all" selected>Version (all)</option>
                     </select>
-                    <select id="table2Filter3" class="table2Filter" data-width="30%">
+                    <select id="table2Filter3" class="table2Filter" data-width="20%">
                       <option value="active" selected>Active themes</option>
                       <option value="all">All (active, inactive)</option>
                       <option value="inactive">Inactive themes</option>
@@ -450,7 +459,7 @@
           <p class="ibm-button-link">
             <button type="button" class="ibm-btn-pri ibm-btn-gray-50" id="sendEmailBtn">Send email</button>
           </p>
-          <p >
+          <p>
             <a href="javascript:;" target="" title="" id="copyEmailBtn">Copy addresses</a>
           </p>
         </div>

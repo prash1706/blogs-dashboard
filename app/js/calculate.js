@@ -8,6 +8,12 @@ var googleResults = null;
 var currentVersion = 'prod';
 var startStyle = '.6s linear 0s normal none infinite ibm-spinner-kf-spin,5.6s ease-in-out 0s normal none infinite ibm-spinner-kf-colors';
 var stopStyle = '.0s linear 0s normal none infinite ibm-spinner-kf-spin,5.6s ease-in-out 0s normal none infinite ibm-spinner-kf-colors'
+var clipboard = new Clipboard('#copyEmailBtn');
+
+clipboard.on('success', function(e) {
+  $('#copyEmailBtn').text('Copied!');
+});
+
 jQuery(function($) {
   reset();
   dashBoardRun();
@@ -105,7 +111,7 @@ jQuery(function($) {
 
   $('.table2Filter').on("change", function() {
     if (themeData.rows != undefined) {
-      updateTable2($('#table2Filter1').val(), $('#table2Filter2').val(), $('#table2Filter3').val());
+      updateTable2();
     }
   });
 
@@ -396,7 +402,7 @@ jQuery(function($) {
     $('#tableLoading').show();
     $('#table h2').text('Details: Themes');
     if (themeData.rows != undefined) {
-      updateTable2($('#table2Filter1').val(), $('#table2Filter2').val(), $('#table2Filter3').val());
+      updateTable2();
       console.log('themeDetails', themeData);
       if ($('.tableDiv').hasClass('card2')) {
         $('#table2').show();
@@ -410,7 +416,7 @@ jQuery(function($) {
           themeData = result;
           console.log('themeDetails', result);
           updateFilter2();
-          updateTable2($('#table2Filter1').val(), $('#table2Filter2').val(), $('#table2Filter3').val());
+          updateTable2();
           if ($('.tableDiv').hasClass('card2')) {
             $('#table2').show();
             $('#table2 table').DataTable().search('').draw();
@@ -451,10 +457,15 @@ jQuery(function($) {
         $('#table2Filter2').append('<option value=' + versionList[i] + '>' + versionList[i] + '</option>');
       }
     }
-
   }
 
-  function updateTable2(filterTheme, filterVersion, filterActive) {
+  function updateTable2() {
+    var OpTheme = $('#table2FilterOp1').val();
+    var filterTheme = $('#table2Filter1').val();
+    var OpVersion = $('#table2FilterOp2').val();
+    var filterVersion = $('#table2Filter2').val();
+    var filterActive = $('#table2Filter3').val();
+
     $('#table2 table').DataTable().destroy();
     $('#table2 table tbody').remove();
     var rImg = '<img src="./images/icon-green.png" class="right"><span class="yesorno"> Yes</span>';
@@ -470,10 +481,19 @@ jQuery(function($) {
       var blogName = themeData.rows[i].value.blogName;
       for (j in themes) {
         var theme = themes[j];
-        if (filterTheme !== 'all' && theme.themeName !== filterTheme) {
+        if (OpTheme == 'equal' && filterTheme !== 'all' && theme.themeName !== filterTheme) {
+          continue;
+        } else if (OpTheme != 'equal' && filterTheme == 'all') {
+          continue;
+        } else if (OpTheme != 'equal' && filterTheme != 'all' && theme.themeName == filterTheme) {
           continue;
         }
-        if (filterVersion !== 'all' && theme.themeVersion !== filterVersion) {
+
+        if (OpVersion == 'equal' && filterVersion !== 'all' && theme.themeName !== filterVersion) {
+          continue;
+        } else if (OpVersion != 'equal' && filterVersion == 'all') {
+          continue;
+        } else if (OpVersion != 'equal' && filterVersion != 'all' && theme.themeName == filterVersion) {
           continue;
         }
         if (filterActive !== 'all' && theme.status !== filterActive) {
@@ -549,10 +569,12 @@ jQuery(function($) {
     })
 
     var blogNames = [];
+    var addressStr = '';
 
     function selectRows() {
       resetEmailUsersPopup();
       blogNames = [];
+      addressStr = '';
       var totalCount = 0;
       var authorCount = 0;
       var subCount = 0;
@@ -576,7 +598,6 @@ jQuery(function($) {
         var blogName = rows[1].substr(6, rows[1].indexOf('</span>') - 6);
         blogNames.push(blogName)
       }
-      console.log(blogNames)
 
       if (blogNames.length > 0) {
         for (var i in userData.rows) {
@@ -611,30 +632,40 @@ jQuery(function($) {
     $('#emailUsersPopup input[name="allorspe"]').change(function() {
       if ($(this).val() === 'all') {
         $('#sendEmailBtn').prop('disabled', false);
+        $('#copyEmailBtn').removeClass('disabled');
       } else if ($('#emailUsersPopup input[name="typeInSpe"]:checked').val() == undefined) {
         $('#sendEmailBtn').prop('disabled', true);
+        $('#copyEmailBtn').addClass('disabled');
       } else {
         $('#sendEmailBtn').prop('disabled', false);
+        $('#copyEmailBtn').removeClass('disabled');
       }
+      calEmails();
     })
 
     $('#emailUsersPopup input[name="typeInSpe"]').change(function() {
       if ($('#emailUsersPopup input[name="typeInSpe"]:checked').val() == undefined) {
         $('#sendEmailBtn').prop('disabled', true);
+        $('#copyEmailBtn').addClass('disabled');
       } else {
         $('#sendEmailBtn').prop('disabled', false);
+        $('#copyEmailBtn').removeClass('disabled');
       }
+      calEmails();
     })
 
 
-    $('#sendEmailBtn').click(function(){
-      window.open('mailto:' + calEmails());
+    $('#sendEmailBtn').click(function() {
+      console.log('addressStr', addressStr)
+        // window.open('mailto:' + addressStr;
     });
 
-    $('#copyEmailBtn').click(function(){
-      window.prompt("Copy to clipboard: Ctrl+C, Enter", calEmails());
-    });
-
+    $('#table2 .emailUsers button').click(function() {
+      $('#copyEmailBtn').text('Copy addresses');
+      if (addressStr === '') {
+        calEmails();
+      }
+    })
 
     $('#table2 table input.selectAll').on('click', function() {
       if ($(this).prop('checked')) {
@@ -645,9 +676,9 @@ jQuery(function($) {
     });
 
     function calEmails() {
+      addressStr = '';
+      $('#copyEmailBtn').text('Copy addresses');
       var emails = [];
-      console.log($('#emailUsersPopup input[name="allorspe"]:checked').val())
-      console.log($('#emailUsersPopup input[name="typeInSpe"]:checked').val())
       if ($('#emailUsersPopup input#allRolesPopup').prop('checked')) {
         for (var i in userData.rows) {
           var blog = userData.rows[i]
@@ -698,8 +729,9 @@ jQuery(function($) {
           }
         }
       }
-      console.log('emails', emails.length, emails);
-      return emails.join(',');
+      console.log('emails', emails.length);
+      addressStr = emails.join(', ');
+      $('#copyEmailBtn').attr('data-clipboard-text', addressStr);
     }
   }
 
@@ -1259,7 +1291,9 @@ jQuery(function($) {
   }
 
   function resetTable2Filters() {
+    $('#table2FilterOp1').val('equal').change();
     $('#table2Filter1').val('all').change();
+    $('#table2FilterOp2').val('equal').change();
     $('#table2Filter2').val('all').change();
     $('#table2Filter3').val('active').change();
   }
