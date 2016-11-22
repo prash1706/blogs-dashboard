@@ -258,21 +258,23 @@
                   <a class="hideFilters">Hide/reset filters</a>
                 </div>
                 <p class="ibm-button-link emailUsers">
-                  <button type="button" class="ibm-btn-pri ibm-btn-gray-50" disabled>Email Users</button>
+                  <button type="button" class="ibm-btn-pri ibm-btn-gray-50 disabled" data-widget="tooltip" title="To email users, first use the check boxes to select one or more blogs.">Email Users</button>
                 </p>
                 <form id="table2FilterForm" class="ibm-column-form" method="post">
                   <p class="ibm-form-elem-grp">
                     <label>Filter by:</label>
-                    <select id="table2FilterOp1" class="table2Filter" data-width="5%">
+                    <select id="table2FilterOp1" class="table2Filter" data-width="7%">
                       <option value="equal" selected>=</option>
                       <option value="notequal">≠</option>
                     </select>
                     <select id="table2Filter1" class="table2Filter" data-width="20%">
                       <option value="all" selected>Theme (all)</option>
                     </select>
-                    <select id="table2FilterOp2" class="table2Filter" data-width="5%">
+                    <select id="table2FilterOp2" class="table2Filter" data-width="7%">
                       <option value="equal" selected>=</option>
                       <option value="notequal">≠</option>
+                      <option value="more">>=</option>
+                      <option value="less"><=</option>
                     </select>
                     <select id="table2Filter2" class="table2Filter" data-width="20%">
                       <option value="all" selected>Version (all)</option>

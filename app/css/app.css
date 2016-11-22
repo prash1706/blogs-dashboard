@@ -510,19 +510,19 @@ table img.wrong {
   width: 20%;
 }
 
-#table2FilterForm p.ibm-form-elem-grp span.select2.select2-container.select2-container--default:nth-child(3){
+#table2FilterForm p.ibm-form-elem-grp span.select2.select2-container.select2-container--default:nth-child(3) {
   margin-right: -5px;
 }
 
-#table2FilterForm p.ibm-form-elem-grp span.select2.select2-container.select2-container--default:nth-child(5){
+#table2FilterForm p.ibm-form-elem-grp span.select2.select2-container.select2-container--default:nth-child(5) {
   margin-right: 20px;
 }
 
-#table2FilterForm p.ibm-form-elem-grp span.select2.select2-container.select2-container--default:nth-child(7){
+#table2FilterForm p.ibm-form-elem-grp span.select2.select2-container.select2-container--default:nth-child(7) {
   margin-right: -5px;
 }
 
-#table2FilterForm p.ibm-form-elem-grp span.select2.select2-container.select2-container--default:nth-child(9){
+#table2FilterForm p.ibm-form-elem-grp span.select2.select2-container.select2-container--default:nth-child(9) {
   margin-right: 20px;
 }
 
@@ -530,6 +530,12 @@ table img.wrong {
   position: absolute;
   left: 720px;
   top: -50px;
+}
+
+#table2 p.emailUsers button.disabled {
+  background-color: #ececec;
+  border: 2px solid #ececec;
+  color: #777677;
 }
 
 
@@ -829,14 +835,13 @@ div.tableDivChild.showThisTableFilter div.tableDivFilter div.filterSwitch a:nth-
   padding: 10px;
 }
 
-#emailUsersPopup>div>p:nth-child(1){
+#emailUsersPopup>div>p:nth-child(1) {
   padding-bottom: 2px;
 }
 
-#emailUsersPopup>div>p:nth-child(2){
+#emailUsersPopup>div>p:nth-child(2) {
   margin-top: 10px;
 }
-
 
 #speRolesPopupGroup {
   display: none;
@@ -844,10 +849,11 @@ div.tableDivChild.showThisTableFilter div.tableDivFilter div.filterSwitch a:nth-
   font-size: 0.9em;
 }
 
-#copyEmailBtn.disabled{
+#copyEmailBtn.disabled {
   pointer-events: none;
   color: #777677;
 }
+
 #rawData {
   display: none;
   position: fixed;

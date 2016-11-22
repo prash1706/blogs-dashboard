@@ -489,11 +489,13 @@ jQuery(function($) {
           continue;
         }
 
-        if (OpVersion == 'equal' && filterVersion !== 'all' && theme.themeName !== filterVersion) {
+        if (OpVersion == 'equal' && filterVersion !== 'all' && theme.themeVersion !== filterVersion) {
           continue;
         } else if (OpVersion != 'equal' && filterVersion == 'all') {
           continue;
-        } else if (OpVersion != 'equal' && filterVersion != 'all' && theme.themeName == filterVersion) {
+        } else if (OpVersion == 'more' && filterVersion !== 'all' && theme.themeVersion < filterVersion) {
+          continue;
+        } else if (OpVersion == 'less' && filterVersion !== 'all' && theme.themeVersion > filterVersion) {
           continue;
         }
         if (filterActive !== 'all' && theme.status !== filterActive) {
@@ -559,13 +561,15 @@ jQuery(function($) {
     });
 
     $('#table2 .emailUsers button').click(function() {
-      var top = $(this).offset().top;
-      var left = $(this).offset().left;
-      $('#emailUsersPopup').css({
-        top: top + 18,
-        left: left - 10
-      });
-      $('#emailUsersPopup').show();
+      if (!$(this).hasClass('disabled')){
+        var top = $(this).offset().top;
+        var left = $(this).offset().left;
+        $('#emailUsersPopup').css({
+          top: top + 18,
+          left: left - 10
+        });
+        $('#emailUsersPopup').show();
+      }
     })
 
     var blogNames = [];
@@ -588,9 +592,9 @@ jQuery(function($) {
       }
 
       if (table.rows({ selected: true }).count() == 0) {
-        $('#table2 p.emailUsers button').prop('disabled', true);
+        $('#table2 p.emailUsers button').addClass('disabled');
       } else {
-        $('#table2 p.emailUsers button').prop('disabled', false);
+        $('#table2 p.emailUsers button').removeClass('disabled');
       }
 
       for (var i in table.rows({ selected: true }).data().toArray()) {
@@ -661,9 +665,11 @@ jQuery(function($) {
     });
 
     $('#table2 .emailUsers button').click(function() {
-      $('#copyEmailBtn').text('Copy addresses');
-      if (addressStr === '') {
-        calEmails();
+      if (!$(this).hasClass('disabled')) {
+        $('#copyEmailBtn').text('Copy addresses');
+        if (addressStr === '') {
+          calEmails();
+        }
       }
     })
 
