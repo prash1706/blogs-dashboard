@@ -448,7 +448,7 @@ jQuery(function($) {
         }
       }
       themeList.sort();
-      versionList.sort();
+      versionList.sort(function(a, b){return compareVersion(a, b)});
       for (i in themeList) {
         $('#table2Filter1').append('<option value=' + themeList[i] + '>' + themeList[i] + '</option>');
       }
@@ -493,9 +493,9 @@ jQuery(function($) {
           continue;
         } else if (OpVersion != 'equal' && filterVersion == 'all') {
           continue;
-        } else if (OpVersion == 'more' && filterVersion !== 'all' && theme.themeVersion < filterVersion) {
+        } else if (OpVersion == 'more' && filterVersion !== 'all' && compareVersion(theme.themeVersion, filterVersion) == -1) {
           continue;
-        } else if (OpVersion == 'less' && filterVersion !== 'all' && theme.themeVersion > filterVersion) {
+        } else if (OpVersion == 'less' && filterVersion !== 'all' && compareVersion(theme.themeVersion, filterVersion) == 1) {
           continue;
         }
         if (filterActive !== 'all' && theme.status !== filterActive) {
@@ -1432,6 +1432,21 @@ jQuery(function($) {
       result = num;
     }
     return result;
+  }
+
+  function compareVersion(ver1, ver2) {
+    var arr1 = ver1.split('.');
+    var arr2 = ver2.split('.');
+
+    var len = arr1.length > arr2.length ? arr1.length : arr2.length;
+    for (var i = 0; i < len; i++){
+      if ((parseInt(arr1[i]) || 0) > (parseInt(arr2[i]) || 0)){
+        return 1;
+      } else if ((parseInt(arr1[i]) || 0) < (parseInt(arr2[i]) || 0)){
+        return -1;
+      }
+    }
+    return 0;
   }
 
 });
