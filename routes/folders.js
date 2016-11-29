@@ -269,6 +269,56 @@ router.get('/blogName/:name', function(req, res) {
   });
 })
 
+var prdDocDeleteJob = schedule.scheduleJob({ hour: 23, minute: 20 }, function() {
+  dbType = cloudant.db.use(cloudant.DBNamePrdJob);
+  prodAndPreDelete(dbType);
+});
+
+var preDocDeleteJob = schedule.scheduleJob({ hour: 23, minute: 40 }, function() {
+  dbType = cloudant.db.use(cloudant.DBNamePreJob);
+  prodAndPreDelete(dbType);
+});
+
+function prodAndPreDelete(dbType) {
+	var blogNames = [];
+	dbType.get('allBlogs', function(err, allBlogsBody) {
+    if (err) {
+        console.log("Error in getting 'allBlogs' details(names) for doc status change.");
+    } else {
+        for (var i = 0; i < allBlogsBody.blogs.length; i++) {
+			blogNames.push(allBlogsBody.blogs[i].name);
+        }
+		dbType.view('blogs', 'blogsName', function(err, body) {
+			if (err) {
+				console.error(err);
+			} else {
+				if (body != '' && body.rows != undefined && body.rows.length != 0) {		  
+					for (var i = 0; i < body.rows.length; i++) {
+						if(blogNames.indexOf(body.rows[i].value)==-1){
+							dbType.get(body.rows[i].value, function(err, blogBody) {
+							if (err) {
+								console.log("Error in getting blog details.");
+							} else {
+								blogBody.blogStatus = 'deleted';
+								dbType.insert(blogBody, function(error, blogData) {
+									if (error) {
+										console.error("Error while updating blog status");
+									} else {
+										console.log("The blog status updated");
+									};
+								});
+							}
+							});
+							
+						}
+					}
+				};
+			};
+		});
+	}	
+    }); 
+};
+
 var day = '';
 var prodDocUpdateJob = schedule.scheduleJob({ hour: 23, minute: 0 }, function() {
   var envType = "prd";
@@ -339,6 +389,7 @@ function eachBlog(blogName, envType, dbType) {
                   _id: nameOfBlog,
                   blogType: "blogDetails",
                   updateDate: day,
+				  blogStatus: 'live',
                   blog: parsedResult.blog
                 };
                 dbType.insert(doc, function(error, data) {
@@ -352,6 +403,7 @@ function eachBlog(blogName, envType, dbType) {
             } else {
               if (parsedResult.blog != undefined) {
                 body2.updateDate = day;
+				body2.blogStatus = 'live';
                 body2.blog = parsedResult.blog;
                 dbType.insert(body2, function(error, data) {
                   if (error) {
@@ -369,13 +421,33 @@ function eachBlog(blogName, envType, dbType) {
         }
       } else {
         console.log("Empty result for the blog - " + blogName);
+		updateStatus(dbType, blogName);
       }
 
     } else {
       console.log("Error in getting details of blog - " + blogName);
       console.error(error);
+	  updateStatus(dbType, blogName);
     }
   });
+};
+
+function updateStatus(dbType, blogName){
+	dbType.get(blogName, function(err, body) {
+		if (err) {
+			console.log("Error in getting blog details for status update.");
+		} else {
+			body.blogStatus = 'deleted',
+			dbType.insert(body, function(error, data) {
+                  if (error) {
+                    console.error("Error while updating status for - " + blogName);
+                  } else {
+                    console.log("Status updated for - " + blogName);
+                  };
+                });
+		}
+		
+	});
 };
 
 var prodWeeklyHistoryData = schedule.scheduleJob({ hour: 23, minute: 15, dayOfWeek: 0 }, function() {
