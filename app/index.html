@@ -274,7 +274,8 @@
                       <option value="equal" selected>=</option>
                       <option value="notequal">≠</option>
                       <option value="more">>=</option>
-                      <option value="less"><=</option>
+                      <option value="less">
+                        <=</option>
                     </select>
                     <select id="table2Filter2" class="table2Filter" data-width="20%">
                       <option value="all" selected>Version (all)</option>
@@ -374,9 +375,15 @@
               </table>
             </div>
             <div id="table6" class="tableDivChild">
+              <p class="ibm-button-link emailUsers">
+                <button type="button" class="ibm-btn-pri ibm-btn-gray-50 disabled" data-widget="tooltip" title="To email users, first use the check boxes to select one or more blogs.">Email Users</button>
+              </p>
               <table class="display" cellspacing="0" width="100%">
                 <thead>
                   <tr>
+                    <th>
+                      <input type="checkbox" class="selectAll" />
+                    </th>
                     <th>Blog</th>
                     <th>Author</th>
                     <th>Subscribers</th>
@@ -462,7 +469,7 @@
             <button type="button" class="ibm-btn-pri ibm-btn-gray-50" id="sendEmailBtn">Send email</button>
           </p>
           <p>
-            <a href="javascript:;" target="" title="" id="copyEmailBtn">Copy addresses</a>
+            <a href="javascript:;" target="" title="" id="copyEmailBtn" class="copyAddressBtn">Copy addresses</a>
           </p>
         </div>
       </div>
@@ -484,6 +491,19 @@
         <div class="ibm-spinner"></div>
         <div id="loadingText">LOADING</div>
         <p class="ibm-ind-link"><a class="ibm-textcolor-blue-30" href="javascript:;">Retry</a></p>
+      </div>
+      <div class="ibm-common-overlay ibm-overlay-alt-two" data-widget="overlay" id="userDetailOverlay">
+        <h1 class="ibm-h2">Authors (23)</h1>
+        <div>
+        </div>
+        <div>
+          <p class="ibm-button-link">
+            <button type="button" class="ibm-btn-pri ibm-btn-gray-50" id="sendUserEmailBtn">Send email</button>
+          </p>
+          <p>
+            <a href="javascript:;" target="" title="" id="copyUserEmailBtn" class="copyAddressBtn">Copy addresses</a>
+          </p>
+        </div>
       </div>
     </div>
   </div>
