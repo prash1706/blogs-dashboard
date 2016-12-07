@@ -120,6 +120,7 @@
         </div>
       </div>
       <section>
+        <!-- Card -->
         <div id="main">
           <a id="backToMenu"><img src="images/back.svg" alt="">Back to dashboard home</a>
           <div class="card" id="card1">
@@ -131,7 +132,6 @@
               <p class="cardValue">loading...</p>
               <p class="cardTitle">total</p>
               <a class="showDetail">Show detail</a>
-              <!-- <a class="hideDetail">Hide detail</a> -->
             </div>
           </div>
           <div class="card" id="card2">
@@ -143,7 +143,6 @@
               <p class="cardValue">loading...</p>
               <p class="cardTitle">standard and current</p>
               <a class="showDetail">Show detail</a>
-              <!-- <a class="hideDetail">Hide detail</a> -->
             </div>
           </div>
           <div class="card" id="card3">
@@ -155,7 +154,6 @@
               <p class="cardValue">loading...</p>
               <p class="cardTitle">avg most current post age</p>
               <a class="showDetail">Show detail</a>
-              <!-- <a class="hideDetail">Hide detail</a> -->
             </div>
           </div>
           <div class="card" id="card4">
@@ -167,7 +165,6 @@
               <p class="cardValue">loading...</p>
               <p class="cardTitle">new in the last full week</p>
               <a class="showDetail">Show detail</a>
-              <!-- <a class="hideDetail">Hide detail</a> -->
             </div>
           </div>
           <div class="card" id="card5">
@@ -179,7 +176,6 @@
               <p class="cardValue">loading...</p>
               <p class="cardTitle">approved</p>
               <a class="showDetail">Show detail</a>
-              <!-- <a class="hideDetail">Hide detail</a> -->
             </div>
           </div>
           <div class="card" id="card6">
@@ -191,7 +187,6 @@
               <p class="cardValue">loading...</p>
               <p class="cardTitle"></p>
               <a class="showDetail">Show detail</a>
-              <!-- <a class="hideDetail">Hide detail</a> -->
             </div>
           </div>
           <div class="card" id="card7">
@@ -203,17 +198,23 @@
               <p class="cardValue">loading...</p>
               <p class="cardTitle">average live per blog</p>
               <a class="showDetail">Show detail</a>
-              <!-- <a class="hideDetail">Hide detail</a> -->
             </div>
           </div>
           <div class="clearFloat"></div>
         </div>
+        <!-- Table -->
         <div id="table">
           <h2>Blogs Detail</h2>
           <div class="tableDiv">
             <div class="hoverTDiv"></div>
-            <p id="tableLoading"><span class="ibm-spinner"></span> Loading...</p>
+            <p id="tableLoading">
+              <span class="ibm-spinner"></span> Loading...
+            </p>
+            <!-- Table1: Blog-->
             <div id="table1" class="tableDivChild">
+              <p class="ibm-button-link emailUsers">
+                <button type="button" class="ibm-btn-pri ibm-btn-gray-50 disabled" data-widget="tooltip" title="To email users, first use the check boxes to select one or more blogs.">Email Users</button>
+              </p>
               <div class="tableDivFilter">
                 <div class="filterSwitch">
                   <a class="showFilters">Show filters</a>
@@ -237,6 +238,9 @@
               <table class="display" cellspacing="0" width="100%">
                 <thead>
                   <tr>
+                    <th>
+                      <input type="checkbox" class="selectAll" />
+                    </th>
                     <th>Blogs</th>
                     <th>Total posts</th>
                     <th>Posts last 6 months</th>
@@ -251,15 +255,16 @@
                 </thead>
               </table>
             </div>
+            <!-- Table2: Theme -->
             <div id="table2" class="tableDivChild">
+              <p class="ibm-button-link emailUsers">
+                <button type="button" class="ibm-btn-pri ibm-btn-gray-50 disabled" data-widget="tooltip" title="To email users, first use the check boxes to select one or more blogs.">Email Users</button>
+              </p>
               <div class="tableDivFilter">
                 <div class="filterSwitch">
                   <a class="showFilters">Show filters</a>
                   <a class="hideFilters">Hide/reset filters</a>
                 </div>
-                <p class="ibm-button-link emailUsers">
-                  <button type="button" class="ibm-btn-pri ibm-btn-gray-50 disabled" data-widget="tooltip" title="To email users, first use the check boxes to select one or more blogs.">Email Users</button>
-                </p>
                 <form id="table2FilterForm" class="ibm-column-form" method="post">
                   <p class="ibm-form-elem-grp">
                     <label>Filter by:</label>
@@ -305,6 +310,7 @@
                 </thead>
               </table>
             </div>
+            <!-- Table3: Day -->
             <div id="table3" class="tableDivChild">
               <table class="display" cellspacing="0">
                 <thead>
@@ -315,10 +321,17 @@
                 </thead>
               </table>
             </div>
+            <!-- Table4: Post -->
             <div id="table4" class="tableDivChild">
+              <p class="ibm-button-link emailUsers">
+                <button type="button" class="ibm-btn-pri ibm-btn-gray-50 disabled" data-widget="tooltip" title="To email users, first use the check boxes to select one or more blogs.">Email Users</button>
+              </p>
               <table class="display" cellspacing="0">
                 <thead>
                   <tr>
+                    <th>
+                      <input type="checkbox" class="selectAll" />
+                    </th>
                     <th>Blog</th>
                     <th>Past 7 days</th>
                     <th>Past 30 days</th>
@@ -329,6 +342,7 @@
                 </thead>
               </table>
             </div>
+            <!-- Table5: Plugin -->
             <div id="table5" class="tableDivChild">
               <div class="tableDivFilter">
                 <div class="filterSwitch">
@@ -374,6 +388,7 @@
                 </thead>
               </table>
             </div>
+            <!-- Table6: User -->
             <div id="table6" class="tableDivChild">
               <p class="ibm-button-link emailUsers">
                 <button type="button" class="ibm-btn-pri ibm-btn-gray-50 disabled" data-widget="tooltip" title="To email users, first use the check boxes to select one or more blogs.">Email Users</button>

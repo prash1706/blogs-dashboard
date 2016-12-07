@@ -13,7 +13,6 @@ var cloudant = require('./models/cloudant');
 var domain = require('domain');
 var request = require('request');
 var FormData = require('form-data');
-
 var app = express();
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'app', 'favicon.ico')));

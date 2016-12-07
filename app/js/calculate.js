@@ -7,7 +7,7 @@ var pageData = {};
 var googleResults = null;
 var currentVersion = 'prod';
 var startStyle = '.6s linear 0s normal none infinite ibm-spinner-kf-spin,5.6s ease-in-out 0s normal none infinite ibm-spinner-kf-colors';
-var stopStyle = '.0s linear 0s normal none infinite ibm-spinner-kf-spin,5.6s ease-in-out 0s normal none infinite ibm-spinner-kf-colors'
+var stopStyle = '.0s linear 0s normal none infinite ibm-spinner-kf-spin,5.6s ease-in-out 0s normal none infinite ibm-spinner-kf-colors';
 var clipboard = new Clipboard('.copyAddressBtn');
 
 clipboard.on('success', function(e) {
@@ -383,26 +383,223 @@ jQuery(function($) {
       var mu = blog.mu == undefined ? '' : blog.mu;
       var oldPost = getTimeToTime(blog.oldPost);
       var newPost = getTimeToTime(blog.newPost);
-      tr += '<tr><td><span>' + blog.blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + formatNumber(blog.totalPosts) + '</td><td>' + formatNumber(blog.halfYearCount) + '</td><td>' + getTimeToDate2(oldPost) + '</td><td>' + getTimeToDate2(newPost) + '</td><td>' + (googleResults[blog.blogName] === undefined ? "" : googleResults[blog.blogName]) + '</td><td title="' + owner + '">' + owner + '</td><td>' + ((country === "" && language === "") ? "" : (country + '/' + language)) + '</td><td>' + mu + '</td><td></td></tr>';
+      tr += '<tr><td></td><td><span>' + blog.blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + formatNumber(blog.totalPosts) + '</td><td>' + formatNumber(blog.halfYearCount) + '</td><td>' + getTimeToDate2(oldPost) + '</td><td>' + getTimeToDate2(newPost) + '</td><td>' + (googleResults[blog.blogName] === undefined ? "" : googleResults[blog.blogName]) + '</td><td title="' + owner + '">' + owner + '</td><td>' + ((country === "" && language === "") ? "" : (country + '/' + language)) + '</td><td>' + mu + '</td><td></td></tr>';
     }
     $('#table1 table').append(tr + '</tbody>');
-    $('#table1 tbody tr td:nth-child(1)').click(function() {
+    $('#table1 tbody tr td:nth-child(2)').click(function() {
       $(this).addClass('showBlogMenu');
-      var name = $(this).parent().children()[0].innerText;
+      var name = $(this).parent().children()[1].innerText;
       var top = $(this).offset().top;
       var left = $(this).offset().left;
       blogMenu(name, top, left);
     });
 
-    $('#table1 table').DataTable({
+    var table = $('#table1 table').DataTable({
       "scrollY": '51vh',
       "scrollX": false,
       "iDisplayLength": 25,
       "columnDefs": [
         { type: 'date-dd-mmm-yyyy', targets: 3 },
-        { type: 'date-dd-mmm-yyyy', targets: 4 }
+        { type: 'date-dd-mmm-yyyy', targets: 4 }, {
+          orderable: false,
+          className: 'select-checkbox',
+          targets: 0
+        }
+      ],
+      select: {
+        style: 'multi+shift',
+        selector: 'td:first-child'
+      },
+      order: [
+        [1, 'asc']
       ]
     });
+
+    table.on('select', function(e, dt, type, indexes) {
+      selectRows();
+    }).on('deselect', function(e, dt, type, indexes) {
+      selectRows();
+    });
+
+    $('#table1 .emailUsers button').click(function() {
+      if (!$(this).hasClass('disabled')) {
+        var top = $(this).offset().top;
+        var left = $(this).offset().left;
+        $('#emailUsersPopup').css({
+          top: top + 18,
+          left: left - 10
+        });
+        $('#emailUsersPopup').show();
+      }
+    })
+
+    var blogNames = [];
+    var addressStr = '';
+
+    function selectRows() {
+      resetEmailUsersPopup();
+      blogNames = [];
+      addressStr = '';
+      var totalCount = 0;
+      var authorCount = 0;
+      var subCount = 0;
+      var conCount = 0;
+      var siteCount = 0;
+      var adminCount = 0;
+      if (table.rows({ selected: false }).count() == 0) {
+        $('#table1 table input.selectAll').prop('checked', true);
+      } else {
+        $('#table1 table input.selectAll').prop('checked', false);
+      }
+
+      if (table.rows({ selected: true }).count() == 0) {
+        $('#table1 p.emailUsers button').addClass('disabled');
+      } else {
+        $('#table1 p.emailUsers button').removeClass('disabled');
+      }
+
+      for (var i in table.rows({ selected: true }).data().toArray()) {
+        var rows = table.rows({ selected: true }).data().toArray()[i];
+        var blogName = rows[1].substr(6, rows[1].indexOf('</span>') - 6);
+        blogNames.push(blogName)
+      }
+
+      if (blogNames.length > 0) {
+        for (var i in userData.rows) {
+          var blog = userData.rows[i];
+          if (blogNames.indexOf(blog.id) == -1) {
+            continue;
+          }
+          totalCount += blog.value.totalCount;
+          authorCount += blog.value.authorCount;
+          conCount += blog.value.conCount;
+          siteCount += blog.value.siteCount;
+          subCount += blog.value.subCount;
+          adminCount += blog.value.adminCount;
+        }
+      }
+
+      $("#emailUsersPopup label[for='allRolesPopup']").text("All Roles (" + totalCount + ')');
+      $("#emailUsersPopup label[for='authorRolePopup']").text("Authors (" + authorCount + ')');
+      $("#emailUsersPopup label[for='subRolePopup']").text("Subscribers (" + subCount + ')');
+      $("#emailUsersPopup label[for='conRolePopup']").text("Contributors (" + conCount + ')');
+      $("#emailUsersPopup label[for='siteRolePopup']").text("Site Owners (" + siteCount + ')');
+      $("#emailUsersPopup label[for='adminRolePopup']").text("Administrators (" + adminCount + ')');
+
+      $("#emailUsersPopup input#authorRolePopup").prop('disabled', (authorCount !== 0) ? false : true);
+      $("#emailUsersPopup input#subRolePopup").prop('disabled', (subCount !== 0) ? false : true);
+      $("#emailUsersPopup input#conRolePopup").prop('disabled', (conCount !== 0) ? false : true);
+      $("#emailUsersPopup input#siteRolePopup").prop('disabled', (siteCount !== 0) ? false : true);
+      $("#emailUsersPopup input#adminRolePopup").prop('disabled', (adminCount !== 0) ? false : true);
+
+    }
+
+    $('#emailUsersPopup input[name="allorspe"]').change(function() {
+      if ($(this).val() === 'all') {
+        $('#sendEmailBtn').prop('disabled', false);
+        $('#copyEmailBtn').removeClass('disabled');
+      } else if ($('#emailUsersPopup input[name="typeInSpe"]:checked').val() == undefined) {
+        $('#sendEmailBtn').prop('disabled', true);
+        $('#copyEmailBtn').addClass('disabled');
+      } else {
+        $('#sendEmailBtn').prop('disabled', false);
+        $('#copyEmailBtn').removeClass('disabled');
+      }
+      calEmails();
+    })
+
+    $('#emailUsersPopup input[name="typeInSpe"]').change(function() {
+      if ($('#emailUsersPopup input[name="typeInSpe"]:checked').val() == undefined) {
+        $('#sendEmailBtn').prop('disabled', true);
+        $('#copyEmailBtn').addClass('disabled');
+      } else {
+        $('#sendEmailBtn').prop('disabled', false);
+        $('#copyEmailBtn').removeClass('disabled');
+      }
+      calEmails();
+    })
+
+
+    $('#sendEmailBtn').click(function() {
+      console.log('addressStr', addressStr)
+      window.open('mailto:' + addressStr);
+    });
+
+    $('#table1 .emailUsers button').click(function() {
+      if (!$(this).hasClass('disabled')) {
+        $('.copyAddressBtn').text('Copy addresses');
+        if (addressStr === '') {
+          calEmails();
+        }
+      }
+    })
+
+    $('#table1 table input.selectAll').on('click', function() {
+      if ($(this).prop('checked')) {
+        table.rows().select();
+      } else {
+        table.rows().deselect();
+      }
+    });
+
+    function calEmails() {
+      addressStr = '';
+      $('.copyAddressBtn').text('Copy addresses');
+      var emails = [];
+      if ($('#emailUsersPopup input#allRolesPopup').prop('checked')) {
+        for (var i in userData.rows) {
+          var blog = userData.rows[i]
+          if (blogNames.indexOf(blog.id) == -1) {
+            continue;
+          }
+          var users = blog.value.users;
+          for (var j in users) {
+            var addr = users[j].userEmail;
+            if (emails.indexOf(addr) !== -1 && emails.length != 0) {
+              continue;
+            }
+            emails.push(addr);
+          }
+        }
+      } else {
+        var roleTypes = [];
+        if ($('#emailUsersPopup input#authorRolePopup').prop('checked')) {
+          roleTypes.push('author')
+        }
+        if ($('#emailUsersPopup input#subRolePopup').prop('checked')) {
+          roleTypes.push('subscriber')
+        }
+        if ($('#emailUsersPopup input#conRolePopup').prop('checked')) {
+          roleTypes.push('editor')
+        }
+        if ($('#emailUsersPopup input#siteRolePopup').prop('checked')) {
+          roleTypes.push('site_owner')
+        }
+        if ($('#emailUsersPopup input#adminRolePopup').prop('checked')) {
+          roleTypes.push('administrator')
+        }
+        for (var i in userData.rows) {
+          var blog = userData.rows[i]
+          if (blogNames.indexOf(blog.id) == -1) {
+            continue;
+          }
+          var users = blog.value.users;
+          for (var j in users) {
+            var user = users[j]
+            if (roleTypes.indexOf(user.roles) === -1) {
+              continue
+            }
+            if (emails.indexOf(user.userEmail) !== -1 && emails.length != 0) {
+              continue;
+            }
+            emails.push(user.userEmail);
+          }
+        }
+      }
+      console.log('emails', emails.length);
+      addressStr = emails.join(', ');
+      $('#copyEmailBtn').attr('data-clipboard-text', addressStr);
+    }
   }
 
   // 2nd Table
@@ -792,7 +989,7 @@ jQuery(function($) {
       $('#table3 table').DataTable({
         "scrollY": '51vh',
         "scrollX": false,
-        "iDisplayLength": 25
+        "iDisplayLength": 25,
       });
     }
   }
@@ -843,13 +1040,13 @@ jQuery(function($) {
         total90 += count90;
         totalyear += countyear;
         totalCount += counttotal;
-        tr += '<tr><td>' + blogName + '<a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + formatNumber(count7) + '</td><td>' + formatNumber(count30) + '</td><td>' + formatNumber(count90) + '</td><td>' + formatNumber(countyear) + '</td><td>' + formatNumber(counttotal) + '</td></tr>';
+        tr += '<tr><td></td><td><span>' + blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + formatNumber(count7) + '</td><td>' + formatNumber(count30) + '</td><td>' + formatNumber(count90) + '</td><td>' + formatNumber(countyear) + '</td><td>' + formatNumber(counttotal) + '</td></tr>';
       };
       $('#table4 table').append(tr + '</tbody>');
-      var total = '<tbody><tr><td>Total</td><td>' + formatNumber(total7) + '</td><td>' + formatNumber(total30) + '</td><td>' + formatNumber(total90) + '</td><td>' + formatNumber(totalyear) + '</td><td>' + formatNumber(totalCount) + '</td></tr></tbody>';
+      var total = '<tbody><tr></td><td><td>Total</td><td>' + formatNumber(total7) + '</td><td>' + formatNumber(total30) + '</td><td>' + formatNumber(total90) + '</td><td>' + formatNumber(totalyear) + '</td><td>' + formatNumber(totalCount) + '</td></tr></tbody>';
       $('#table4 table').append(total);
 
-      $('#table4 tbody tr td:nth-child(1)').click(function() {
+      $('#table4 tbody tr td:nth-child(2)').click(function() {
         $(this).addClass('showBlogMenu');
         var name = $(this).parent().children()[0].innerText;
         var top = $(this).offset().top;
@@ -857,11 +1054,210 @@ jQuery(function($) {
         blogMenu(name, top, left);
       });
 
-      $('#table4 table').DataTable({
+      var table = $('#table4 table').DataTable({
         "iDisplayLength": 25,
         "scrollY": '51vh',
-        "scrollX": false
+        "scrollX": false,
+        "scrollX": false,
+        columnDefs: [{
+          orderable: false,
+          className: 'select-checkbox',
+          targets: 0
+        }],
+        select: {
+          style: 'multi+shift',
+          selector: 'td:first-child'
+        },
+        order: [
+          [1, 'asc']
+        ]
       });
+
+      table.on('select', function(e, dt, type, indexes) {
+        selectRows();
+      }).on('deselect', function(e, dt, type, indexes) {
+        selectRows();
+      });
+
+      $('#table4 .emailUsers button').click(function() {
+        if (!$(this).hasClass('disabled')) {
+          var top = $(this).offset().top;
+          var left = $(this).offset().left;
+          $('#emailUsersPopup').css({
+            top: top + 18,
+            left: left - 10
+          });
+          $('#emailUsersPopup').show();
+        }
+      })
+
+      var blogNames = [];
+      var addressStr = '';
+
+      function selectRows() {
+        resetEmailUsersPopup();
+        blogNames = [];
+        addressStr = '';
+        var totalCount = 0;
+        var authorCount = 0;
+        var subCount = 0;
+        var conCount = 0;
+        var siteCount = 0;
+        var adminCount = 0;
+        if (table.rows({ selected: false }).count() == 0) {
+          $('#table4 table input.selectAll').prop('checked', true);
+        } else {
+          $('#table4 table input.selectAll').prop('checked', false);
+        }
+
+        if (table.rows({ selected: true }).count() == 0) {
+          $('#table4 p.emailUsers button').addClass('disabled');
+        } else {
+          $('#table4 p.emailUsers button').removeClass('disabled');
+        }
+
+        for (var i in table.rows({ selected: true }).data().toArray()) {
+          var rows = table.rows({ selected: true }).data().toArray()[i];
+          var blogName = rows[1].substr(6, rows[1].indexOf('</span>') - 6);
+          blogNames.push(blogName)
+        }
+
+        if (blogNames.length > 0) {
+          for (var i in userData.rows) {
+            var blog = userData.rows[i];
+            if (blogNames.indexOf(blog.id) == -1) {
+              continue;
+            }
+            totalCount += blog.value.totalCount;
+            authorCount += blog.value.authorCount;
+            conCount += blog.value.conCount;
+            siteCount += blog.value.siteCount;
+            subCount += blog.value.subCount;
+            adminCount += blog.value.adminCount;
+          }
+        }
+
+        $("#emailUsersPopup label[for='allRolesPopup']").text("All Roles (" + totalCount + ')');
+        $("#emailUsersPopup label[for='authorRolePopup']").text("Authors (" + authorCount + ')');
+        $("#emailUsersPopup label[for='subRolePopup']").text("Subscribers (" + subCount + ')');
+        $("#emailUsersPopup label[for='conRolePopup']").text("Contributors (" + conCount + ')');
+        $("#emailUsersPopup label[for='siteRolePopup']").text("Site Owners (" + siteCount + ')');
+        $("#emailUsersPopup label[for='adminRolePopup']").text("Administrators (" + adminCount + ')');
+
+        $("#emailUsersPopup input#authorRolePopup").prop('disabled', (authorCount !== 0) ? false : true);
+        $("#emailUsersPopup input#subRolePopup").prop('disabled', (subCount !== 0) ? false : true);
+        $("#emailUsersPopup input#conRolePopup").prop('disabled', (conCount !== 0) ? false : true);
+        $("#emailUsersPopup input#siteRolePopup").prop('disabled', (siteCount !== 0) ? false : true);
+        $("#emailUsersPopup input#adminRolePopup").prop('disabled', (adminCount !== 0) ? false : true);
+
+      }
+
+      $('#emailUsersPopup input[name="allorspe"]').change(function() {
+        if ($(this).val() === 'all') {
+          $('#sendEmailBtn').prop('disabled', false);
+          $('#copyEmailBtn').removeClass('disabled');
+        } else if ($('#emailUsersPopup input[name="typeInSpe"]:checked').val() == undefined) {
+          $('#sendEmailBtn').prop('disabled', true);
+          $('#copyEmailBtn').addClass('disabled');
+        } else {
+          $('#sendEmailBtn').prop('disabled', false);
+          $('#copyEmailBtn').removeClass('disabled');
+        }
+        calEmails();
+      })
+
+      $('#emailUsersPopup input[name="typeInSpe"]').change(function() {
+        if ($('#emailUsersPopup input[name="typeInSpe"]:checked').val() == undefined) {
+          $('#sendEmailBtn').prop('disabled', true);
+          $('#copyEmailBtn').addClass('disabled');
+        } else {
+          $('#sendEmailBtn').prop('disabled', false);
+          $('#copyEmailBtn').removeClass('disabled');
+        }
+        calEmails();
+      })
+
+
+      $('#sendEmailBtn').click(function() {
+        console.log('addressStr', addressStr)
+        window.open('mailto:' + addressStr);
+      });
+
+      $('#table4 .emailUsers button').click(function() {
+        if (!$(this).hasClass('disabled')) {
+          $('.copyAddressBtn').text('Copy addresses');
+          if (addressStr === '') {
+            calEmails();
+          }
+        }
+      })
+
+      $('#table4 table input.selectAll').on('click', function() {
+        if ($(this).prop('checked')) {
+          table.rows().select();
+        } else {
+          table.rows().deselect();
+        }
+      });
+
+      function calEmails() {
+        addressStr = '';
+        $('.copyAddressBtn').text('Copy addresses');
+        var emails = [];
+        if ($('#emailUsersPopup input#allRolesPopup').prop('checked')) {
+          for (var i in userData.rows) {
+            var blog = userData.rows[i]
+            if (blogNames.indexOf(blog.id) == -1) {
+              continue;
+            }
+            var users = blog.value.users;
+            for (var j in users) {
+              var addr = users[j].userEmail;
+              if (emails.indexOf(addr) !== -1 && emails.length != 0) {
+                continue;
+              }
+              emails.push(addr);
+            }
+          }
+        } else {
+          var roleTypes = [];
+          if ($('#emailUsersPopup input#authorRolePopup').prop('checked')) {
+            roleTypes.push('author')
+          }
+          if ($('#emailUsersPopup input#subRolePopup').prop('checked')) {
+            roleTypes.push('subscriber')
+          }
+          if ($('#emailUsersPopup input#conRolePopup').prop('checked')) {
+            roleTypes.push('editor')
+          }
+          if ($('#emailUsersPopup input#siteRolePopup').prop('checked')) {
+            roleTypes.push('site_owner')
+          }
+          if ($('#emailUsersPopup input#adminRolePopup').prop('checked')) {
+            roleTypes.push('administrator')
+          }
+          for (var i in userData.rows) {
+            var blog = userData.rows[i]
+            if (blogNames.indexOf(blog.id) == -1) {
+              continue;
+            }
+            var users = blog.value.users;
+            for (var j in users) {
+              var user = users[j]
+              if (roleTypes.indexOf(user.roles) === -1) {
+                continue
+              }
+              if (emails.indexOf(user.userEmail) !== -1 && emails.length != 0) {
+                continue;
+              }
+              emails.push(user.userEmail);
+            }
+          }
+        }
+        console.log('emails', emails.length);
+        addressStr = emails.join(', ');
+        $('#copyEmailBtn').attr('data-clipboard-text', addressStr);
+      }
     }
   }
 
