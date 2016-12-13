@@ -445,8 +445,8 @@ jQuery(function($) {
       "scrollX": false,
       "iDisplayLength": 25,
       "columnDefs": [
-        { type: 'date-dd-mmm-yyyy', targets: 3 },
-        { type: 'date-dd-mmm-yyyy', targets: 4 }, {
+        { type: 'date-dd-mmm-yyyy', targets: 4 },
+        { type: 'date-dd-mmm-yyyy', targets: 5 }, {
           orderable: false,
           className: 'select-checkbox',
           targets: 0
