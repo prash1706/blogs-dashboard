@@ -1,3 +1,13 @@
+const CurrentVersion = {  // Current = ibmNorthstar 1.7 or higher (1.7.1 etc)   or ibmNorthstarDev 1.6.152 or higher (1.6.153…)
+  version1: {
+    themeName: "ibmNorthstar",
+    version: "1.7"
+  },
+  version2: {
+    themeName: "ibmNorthstarDev",
+    version: "1.6.152"
+  }
+};
 var blogs = [];
 var blogData = {};
 var themeData = {};
@@ -71,6 +81,42 @@ jQuery(function($) {
       calTable6();
     } else if (this.id === 'card7') {
       calTable7();
+    }
+  })
+
+  $('p.toggleFilter button').click(function(){
+    if ($(this).hasClass('showFilter')){
+      $(this).removeClass('showFilter');
+      $(this).addClass('hideFilter');
+      $(this).text('Hide/reset filters');
+
+      for (i in $('.tableDivChild')) {
+        if ($.contains($('.tableDivChild')[i], this)) {
+          $($('.tableDivChild')[i]).addClass('showThisTableFilter')
+          break;
+        }
+      }
+    } else if ($(this).hasClass('hideFilter')){
+      $(this).removeClass('hideFilter');
+      $(this).addClass('showFilter');
+      $(this).text('Show filters');
+      var thisID = '';
+      for (i in $('.showThisTableFilter')) {
+        if ($.contains($('.showThisTableFilter')[i], this)) {
+          thisID = $($('.showThisTableFilter')[i]).attr('id');
+          $($('.showThisTableFilter')[i]).removeClass('showThisTableFilter')
+          break;
+        }
+      }
+      if (thisID === 'table1') {
+        setTimeout(resetTable1Filters(), 500);
+      } else if (thisID === 'table2') {
+        setTimeout(resetTable2Filters(), 500);
+      } else if (thisID === 'table5') {
+        setTimeout(resetTable5Filters(), 500);
+      } else if (thisID === 'table7') {
+        setTimeout(resetTable7Filters(), 500);
+      }
     }
   })
 
@@ -697,9 +743,11 @@ jQuery(function($) {
           continue;
         }
 
-        if (OpVersion == 'equal' && filterVersion !== 'all' && theme.themeVersion !== filterVersion) {
+        if (OpVersion == 'equal' && filterVersion !== 'all' && compareVersion(theme.themeVersion, filterVersion) != 0) {
           continue;
         } else if (OpVersion != 'equal' && filterVersion == 'all') {
+          continue;
+        } else if (OpVersion == 'notequal' && compareVersion(theme.themeVersion, filterVersion) == 0){
           continue;
         } else if (OpVersion == 'more' && filterVersion !== 'all' && compareVersion(theme.themeVersion, filterVersion) == -1) {
           continue;
@@ -717,7 +765,7 @@ jQuery(function($) {
           ifStardard = true;
           standCount++;
         }
-        if (theme.themeVersion.substr(0, 3) === '1.6') {
+        if (judgeIfCurrent(theme.themeName, theme.themeVersion) == 1) {
           ifCurrent = true;
           currentCount++;
         }
@@ -1745,7 +1793,7 @@ jQuery(function($) {
   function calTable7() {
     $('#table7').hide();
     $('#tableLoading').show();
-    $('#table h2').text('Details: Blogs');
+    $('#table h2').text('Details: Pages');
     if (pageData.rows != undefined) {
       updateTable7($('#table7Filter1').val(), $('#table7Filter2').val(), $('#table7Filter3').val());
       console.log('tableDetails', pageData);
@@ -2102,6 +2150,12 @@ jQuery(function($) {
   }
 
   function compareVersion(ver1, ver2) {
+    if (ver1.endsWith('.0')){
+      ver1 = ver1.slice(0, ver1.indexOf('.0'));
+    }
+    if (ver2.endsWith('.0')){
+      ver2 = ver2.slice(0, ver2.indexOf('.0'));
+    }
     var arr1 = ver1.split('.');
     var arr2 = ver2.split('.');
 
@@ -2114,6 +2168,19 @@ jQuery(function($) {
       }
     }
     return 0;
+  }
+
+  function judgeIfCurrent(themeName, version) {
+    if (typeof themeName != 'string'  || typeof version != 'string'){
+      return -1
+    } else {
+      if (themeName === CurrentVersion.version1.themeName && (compareVersion(version, CurrentVersion.version1.version) != -1)){
+        return 1
+      } else if (themeName === CurrentVersion.version2.themeName && (compareVersion(version, CurrentVersion.version2.version) != -1)){
+        return 1
+      }
+      return 0
+    }
   }
 
 });

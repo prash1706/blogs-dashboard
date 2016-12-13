@@ -455,11 +455,20 @@ table img.wrong {
   text-decoration: underline;
 }
 
-#table p.emailUsers {
+#table .actionArea {
   position: absolute;
-  left: 220px;
+  left: 180px;
   top: -10px;
   z-index: 100;
+}
+
+#table p.toggleFilter {
+  float: left;
+  margin-right: 20px;
+}
+
+#table p.emailUsers {
+  float: left;
 }
 
 #table p.emailUsers button.disabled {
