@@ -612,6 +612,10 @@ table img.wrong {
   text-align: center;
 }
 
+#table8 tbody tr td {
+  white-space: nowrap;
+}
+
 .hoverTDiv {
   position: absolute;
   width: 1165px;
@@ -648,6 +652,10 @@ table img.wrong {
   background-color: #FF6D3A;
 }
 
+.tableDiv.card8 .hoverTDiv {
+  background-color: #FF6D3A;
+}
+
 .tableDiv #table1 {
   display: none;
 }
@@ -673,6 +681,10 @@ table img.wrong {
 }
 
 .tableDiv #table7 {
+  display: none;
+}
+
+.tableDiv #table8 {
   display: none;
 }
 

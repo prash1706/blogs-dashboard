@@ -1,4 +1,4 @@
-const CurrentVersion = {  // Current = ibmNorthstar 1.7 or higher (1.7.1 etc)   or ibmNorthstarDev 1.6.152 or higher (1.6.153…)
+const CurrentVersion = { // Current = ibmNorthstar 1.7 or higher (1.7.1 etc)   or ibmNorthstarDev 1.6.152 or higher (1.6.153…)
   version1: {
     themeName: "ibmNorthstar",
     version: "1.7"
@@ -53,6 +53,9 @@ jQuery(function($) {
     } else if ($('.tableDiv').hasClass('card7')) {
       $('#table7').hide();
       $('.tableDiv').removeClass('card7');
+    } else if ($('.tableDiv').hasClass('card8')) {
+      $('#table8').hide();
+      $('.tableDiv').removeClass('card8');
     }
     $('#table1').hide();
     $('#table2').hide();
@@ -61,6 +64,7 @@ jQuery(function($) {
     $('#table5').hide();
     $('#table6').hide();
     $('#table7').hide();
+    $('#table8').hide();
 
     $('#table').show();
     $('.tableDiv').addClass(this.id);
@@ -81,11 +85,13 @@ jQuery(function($) {
       calTable6();
     } else if (this.id === 'card7') {
       calTable7();
+    } else if (this.id === 'card8') {
+      calTable8();
     }
   })
 
-  $('p.toggleFilter button').click(function(){
-    if ($(this).hasClass('showFilter')){
+  $('p.toggleFilter button').click(function() {
+    if ($(this).hasClass('showFilter')) {
       $(this).removeClass('showFilter');
       $(this).addClass('hideFilter');
       $(this).text('Hide/reset filters');
@@ -96,7 +102,7 @@ jQuery(function($) {
           break;
         }
       }
-    } else if ($(this).hasClass('hideFilter')){
+    } else if ($(this).hasClass('hideFilter')) {
       $(this).removeClass('hideFilter');
       $(this).addClass('showFilter');
       $(this).text('Show filters');
@@ -348,6 +354,10 @@ jQuery(function($) {
       pageCount += blogs.rows[i].value.pageCount;
     }
     $('#card7 .cardValue').text(getPercent2(pageCount, blogCount) + ' pages')
+  }
+
+  function calUsers() {
+    $('#card8 .cardValue').text("XXX Users");
   }
 
   // 1st Table
@@ -747,7 +757,7 @@ jQuery(function($) {
           continue;
         } else if (OpVersion != 'equal' && filterVersion == 'all') {
           continue;
-        } else if (OpVersion == 'notequal' && compareVersion(theme.themeVersion, filterVersion) == 0){
+        } else if (OpVersion == 'notequal' && compareVersion(theme.themeVersion, filterVersion) == 0) {
           continue;
         } else if (OpVersion == 'more' && filterVersion !== 'all' && compareVersion(theme.themeVersion, filterVersion) == -1) {
           continue;
@@ -1889,6 +1899,42 @@ jQuery(function($) {
     });
   }
 
+  function calTable8() {
+    $('#table8').hide();
+    $('#tableLoading').show();
+    $('#table h2').text('Details: Users');
+    if (userData.rows != undefined) {
+      updateTable8();
+      console.log("userDetails", userData);
+      if ($('.tableDiv').hasClass('card8')) {
+        $('#table8').show();
+        $('#table8 table').DataTable().search('').draw();
+        $('#tableLoading').hide();
+      }
+    }
+
+    function updateTable8() {
+      $('#table8 table').DataTable().destroy();
+      $('#table8 table tbody').remove();
+      var tr = '<tbody>';
+      for (let blog of userData.rows) {
+        let userList = [];
+        for (let user of blog.value.users) {
+          if (user.userEmail && userList.indexOf(user.userEmail) == -1) {
+            userList.push(user.userEmail);
+            tr += '<tr><td>' + user.displayName + '</td><td>' + user.userEmail + '</td><td>' + blog.value.blogName + '</td><td>' + getTrueUserRole(user.roles) + '</td><td>' + user.displayName + '</td></tr>';
+          }
+        }
+      };
+      $('#table8 table').append(tr + '</tbody>');
+      $('#table8 table').DataTable({
+        "iDisplayLength": 100,
+        "scrollY": '51vh',
+        "scrollX": false
+      });
+    }
+  }
+
   function reset() {
     $('#loadingMockupSpinner div.ibm-spinner').css('animation', startStyle);
     $('#loadingText').text('LOADING');
@@ -1910,6 +1956,7 @@ jQuery(function($) {
     $('#card5 .cardValue').text('');
     $('#card6 .cardValue').text('');
     $('#card7 .cardValue').text('');
+    $('#card8 .cardValue').text('');
     $('.myTable').removeClass('myTable');
     $('#main').removeClass('showTable');
     $('#table').hide();
@@ -1978,6 +2025,7 @@ jQuery(function($) {
       calPost();
       calAuthor();
       calPages();
+      calUsers();
       $('#loadingMockupSpinner').hide();
     }
   }
@@ -2150,10 +2198,10 @@ jQuery(function($) {
   }
 
   function compareVersion(ver1, ver2) {
-    if (ver1.endsWith('.0')){
+    if (ver1.endsWith('.0')) {
       ver1 = ver1.slice(0, ver1.indexOf('.0'));
     }
-    if (ver2.endsWith('.0')){
+    if (ver2.endsWith('.0')) {
       ver2 = ver2.slice(0, ver2.indexOf('.0'));
     }
     var arr1 = ver1.split('.');
@@ -2171,15 +2219,38 @@ jQuery(function($) {
   }
 
   function judgeIfCurrent(themeName, version) {
-    if (typeof themeName != 'string'  || typeof version != 'string'){
+    if (typeof themeName != 'string' || typeof version != 'string') {
       return -1
     } else {
-      if (themeName === CurrentVersion.version1.themeName && (compareVersion(version, CurrentVersion.version1.version) != -1)){
+      if (themeName === CurrentVersion.version1.themeName && (compareVersion(version, CurrentVersion.version1.version) != -1)) {
         return 1
-      } else if (themeName === CurrentVersion.version2.themeName && (compareVersion(version, CurrentVersion.version2.version) != -1)){
+      } else if (themeName === CurrentVersion.version2.themeName && (compareVersion(version, CurrentVersion.version2.version) != -1)) {
         return 1
       }
       return 0
+    }
+  }
+
+  function getTrueUserRole(role) {
+    if (typeof role != 'string') {
+      return role;
+    }
+
+    switch (role) {
+      case 'site_owner':
+        return 'Site Owners';
+      case 'administrator':
+        return 'Administrators';
+      case 'author':
+        return 'Author';
+      case 'contributor':
+        return 'Contributors';
+      case 'editor':
+        return 'Contributors';
+      case 'subscriber':
+        return 'Subscribers';
+      default:
+      return role;
     }
   }
 
