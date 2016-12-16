@@ -441,7 +441,8 @@ table img.wrong {
 #table2 tbody tr td:nth-child(2),
 #table3 tbody tr td:nth-child(1),
 #table4 tbody tr td:nth-child(2),
-#table6 tbody tr td:nth-child(2) {
+#table6 tbody tr td:nth-child(2),
+#table8 tbody tr td:nth-child(3) {
   color: #4178BE;
   cursor: pointer;
   white-space: nowrap;
@@ -612,8 +613,12 @@ table img.wrong {
   text-align: center;
 }
 
+/* table8 */
+
 #table8 tbody tr td {
-  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .hoverTDiv {

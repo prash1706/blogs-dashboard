@@ -126,35 +126,6 @@ jQuery(function($) {
     }
   })
 
-  $('a.showFilters').click(function() {
-    for (i in $('.tableDivChild')) {
-      if ($.contains($('.tableDivChild')[i], this)) {
-        $($('.tableDivChild')[i]).addClass('showThisTableFilter')
-        break;
-      }
-    }
-  })
-
-  $('a.hideFilters').click(function() {
-    var thisID = '';
-    for (i in $('.showThisTableFilter')) {
-      if ($.contains($('.showThisTableFilter')[i], this)) {
-        thisID = $($('.showThisTableFilter')[i]).attr('id');
-        $($('.showThisTableFilter')[i]).removeClass('showThisTableFilter')
-        break;
-      }
-    }
-    if (thisID === 'table1') {
-      setTimeout(resetTable1Filters(), 500);
-    } else if (thisID === 'table2') {
-      setTimeout(resetTable2Filters(), 500);
-    } else if (thisID === 'table5') {
-      setTimeout(resetTable5Filters(), 500);
-    } else if (thisID === 'table7') {
-      setTimeout(resetTable7Filters(), 500);
-    }
-  })
-
   $('a.showUserDetailOverlay').click(function() {
     IBMCore.common.widget.overlay.show('userDetailOverlay');
   })
@@ -357,7 +328,7 @@ jQuery(function($) {
   }
 
   function calUsers() {
-    $('#card8 .cardValue').text("XXX Users");
+    $('#card8 .cardValue').text("Users");
   }
 
   // 1st Table
@@ -1922,16 +1893,24 @@ jQuery(function($) {
         for (let user of blog.value.users) {
           if (user.userEmail && userList.indexOf(user.userEmail) == -1) {
             userList.push(user.userEmail);
-            tr += '<tr><td>' + user.displayName + '</td><td>' + user.userEmail + '</td><td>' + blog.value.blogName + '</td><td>' + getTrueUserRole(user.roles) + '</td><td>' + user.displayName + '</td></tr>';
+            tr += '<tr><td>' + user.displayName + '</td><td><a href="mailto:' + user.userEmail + '">' + user.userEmail + '</a></td><td><span>' + blog.value.blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + getTrueUserRole(user.roles) + '</td><td>' + user.userLogin + '</td></tr>';
           }
         }
       };
       $('#table8 table').append(tr + '</tbody>');
+      $('#table8 tbody tr td:nth-child(3)').click(function() {
+        $(this).addClass('showBlogMenu');
+        var name = $(this).parent().children()[2].innerText;
+        var top = $(this).offset().top;
+        var left = $(this).offset().left;
+        blogMenu(name, top, left);
+      });
       $('#table8 table').DataTable({
         "iDisplayLength": 100,
         "scrollY": '51vh',
         "scrollX": false
       });
+
     }
   }
 
@@ -2246,11 +2225,11 @@ jQuery(function($) {
       case 'contributor':
         return 'Contributors';
       case 'editor':
-        return 'Contributors';
+        return 'Editor';
       case 'subscriber':
         return 'Subscribers';
       default:
-      return role;
+        return role;
     }
   }
 
