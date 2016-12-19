@@ -200,7 +200,7 @@
               <a class="showDetail">Show detail</a>
             </div>
           </div>
-           <div class="card" id="card8">
+          <div class="card" id="card8">
             <div class="hoverDiv"></div>
             <div class="left">
               <img src="./images/7stack-pages.png" alt="">
@@ -467,6 +467,37 @@
             </div>
             <!-- Table8: User -->
             <div id="table8" class="tableDivChild">
+              <div class="actionArea">
+                <p class="ibm-button-link toggleFilter">
+                  <button type="button" class="ibm-btn-pri ibm-btn-gray-50 showFilter">Show filters</button>
+                </p>
+              </div>
+              <div class="tableDivFilter">
+                <form id="table8FilterForm" class="ibm-column-form" method="post">
+                  <p class="ibm-form-elem-grp">
+                    <label>Filter by:</label>
+                    <select id="table8FilterOp1" class="table8Filter" data-width="7%">
+                      <option value="equal" selected>=</option>
+                      <option value="notequal">≠</option>
+                    </select>
+                    <select id="table8Filter1" class="table8Filter" data-width="20%">
+                      <option value="all" selected>Blog (all)</option>
+                    </select>
+                    <select id="table8FilterOp2" class="table8Filter" data-width="7%">
+                      <option value="equal" selected>=</option>
+                      <option value="notequal">≠</option>
+                    </select>
+                    <select id="table8Filter2" class="table8Filter" data-width="20%">
+                      <option value="all" selected>Role (all)</option>
+                      <option value="administrator">Administrators</option>
+                      <option value="site_owner">Site Owners</option>
+                      <option value="contributor">Contributors</option>
+                      <option value="editor">Editor</option>
+                      <option value="subscriber">Subscribers</option>
+                    </select>
+                  </p>
+                </form>
+              </div>
               <table class="display" cellspacing="0" width="100%">
                 <thead>
                   <tr>

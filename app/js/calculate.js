@@ -122,6 +122,8 @@ jQuery(function($) {
         setTimeout(resetTable5Filters(), 500);
       } else if (thisID === 'table7') {
         setTimeout(resetTable7Filters(), 500);
+      } else if (thisID === 'table8') {
+        setTimeout(resetTable8Filters(), 500);
       }
     }
   })
@@ -151,6 +153,12 @@ jQuery(function($) {
   $('.table7Filter').on("change", function() {
     if (pageData.rows != undefined) {
       updateTable7($('#table7Filter1').val(), $('#table7Filter2').val(), $('#table7Filter3').val());
+    }
+  });
+
+  $('.table8Filter').on("change", function() {
+    if (userData.rows != undefined) {
+      updateTable8();
     }
   });
 
@@ -410,7 +418,7 @@ jQuery(function($) {
       var mu = blog.mu == undefined ? '' : blog.mu;
       var oldPost = getTimeToTime(blog.oldPost);
       var newPost = getTimeToTime(blog.newPost);
-      tr += '<tr><td></td><td><span>' + blog.blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + formatNumber(blog.totalPosts) + '</td><td>' + formatNumber(blog.halfYearCount) + '</td><td>' + getTimeToDate2(oldPost) + '</td><td>' + getTimeToDate2(newPost) + '</td><td>' + (googleResults[blog.blogName] === undefined ? "" : googleResults[blog.blogName]) + '</td><td title="' + owner + '">' + owner + '</td><td>' + ((country === "" && language === "") ? "" : (country + '/' + language)) + '</td><td>' + mu + '</td><td></td></tr>';
+      tr += '<tr><td></td><td><span>' + blog.blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + formatNumber(blog.totalPosts) + '</td><td>' + formatNumber(blog.halfYearCount) + '</td><td>' + getTimeToDate2(oldPost) + '</td><td>' + getTimeToDate2(newPost) + '</td><td>' + (googleResults[blog.blogName] === undefined ? "" : googleResults[blog.blogName]) + '</td><td><a title="' + owner + '" href="mailto:' + owner + '"">' + owner + '</a></td><td>' + ((country === "" && language === "") ? "" : (country + '/' + language)) + '</td><td>' + mu + '</td><td></td></tr>';
     }
     $('#table1 table').append(tr + '</tbody>');
     $('#table1 tbody tr td:nth-child(2)').click(function() {
@@ -1875,6 +1883,7 @@ jQuery(function($) {
     $('#tableLoading').show();
     $('#table h2').text('Details: Users');
     if (userData.rows != undefined) {
+      updateFilter8();
       updateTable8();
       console.log("userDetails", userData);
       if ($('.tableDiv').hasClass('card8')) {
@@ -1884,34 +1893,64 @@ jQuery(function($) {
       }
     }
 
-    function updateTable8() {
-      $('#table8 table').DataTable().destroy();
-      $('#table8 table tbody').remove();
-      var tr = '<tbody>';
-      for (let blog of userData.rows) {
-        let userList = [];
-        for (let user of blog.value.users) {
-          if (user.userEmail && userList.indexOf(user.userEmail) == -1) {
-            userList.push(user.userEmail);
-            tr += '<tr><td>' + user.displayName + '</td><td><a href="mailto:' + user.userEmail + '">' + user.userEmail + '</a></td><td><span>' + blog.value.blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + getTrueUserRole(user.roles) + '</td><td>' + user.userLogin + '</td></tr>';
-          }
+    function updateFilter8() {
+      var blogList = [];
+      for (i in userData.rows) {
+        var blogName = userData.rows[i].value.blogName;
+        if (blogName != '' && blogList.indexOf(blogName) === -1) {
+          blogList.push(blogName)
         }
-      };
-      $('#table8 table').append(tr + '</tbody>');
-      $('#table8 tbody tr td:nth-child(3)').click(function() {
-        $(this).addClass('showBlogMenu');
-        var name = $(this).parent().children()[2].innerText;
-        var top = $(this).offset().top;
-        var left = $(this).offset().left;
-        blogMenu(name, top, left);
-      });
-      $('#table8 table').DataTable({
-        "iDisplayLength": 100,
-        "scrollY": '51vh',
-        "scrollX": false
-      });
-
+      }
+      blogList.sort();
+      for (i in blogList) {
+        $('#table8Filter1').append('<option value=' + blogList[i] + '>' + blogList[i] + '</option>');
+      }
     }
+
+  }
+
+
+  function updateTable8() {
+    var op1 = $('#table8FilterOp1').val();
+    var blogFilter = $('#table8Filter1').val();
+    var op2 = $('#table8FilterOp2').val();
+    var roleFilter = $('#table8Filter2').val();
+    $('#table8 table').DataTable().destroy();
+    $('#table8 table tbody').remove();
+    var tr = '<tbody>';
+    for (let blog of userData.rows) {
+      if (op1 == 'equal' && blogFilter != 'all' && blogFilter != blog.value.blogName){
+        continue;
+      } else if (op1 == 'notequal' && (blogFilter == 'all' || blogFilter == blog.value.blogName)){
+        continue;
+      }
+      let userList = [];
+      for (let user of blog.value.users) {
+        if (op2 == 'equal' && roleFilter != 'all' && roleFilter != user.roles){
+          continue;
+        } else if (op2 == 'notequal' && (roleFilter == 'all' || roleFilter == user.roles)){
+          continue;
+        }
+        if (user.userEmail && userList.indexOf(user.userEmail) == -1) {
+          userList.push(user.userEmail);
+          tr += '<tr><td>' + user.displayName + '</td><td><a href="mailto:' + user.userEmail + '">' + user.userEmail + '</a></td><td><span>' + blog.value.blogName + '</span><a class="jumpLink"><img src="./images/menu.svg" alt="Blogs" /></a></td><td>' + getTrueUserRole(user.roles) + '</td><td>' + user.userLogin + '</td></tr>';
+        }
+      }
+    };
+    $('#table8 table').append(tr + '</tbody>');
+    $('#table8 tbody tr td:nth-child(3)').click(function() {
+      $(this).addClass('showBlogMenu');
+      var name = $(this).parent().children()[2].innerText;
+      var top = $(this).offset().top;
+      var left = $(this).offset().left;
+      blogMenu(name, top, left);
+    });
+    $('#table8 table').DataTable({
+      "iDisplayLength": 25,
+      "scrollY": '51vh',
+      "scrollX": false
+    });
+
   }
 
   function reset() {
@@ -2059,6 +2098,13 @@ jQuery(function($) {
     $('#table7Filter2').val('all').change();
     $('#table7Filter3').val('all').change();
     $('#table7Filter4').val('all').change();
+  }
+
+  function resetTable8Filters() {
+    $('#table8FilterOp1').val('equal').change();
+    $('#table8Filter1').val('all').change();
+    $('#table8FilterOp2').val('equal').change();
+    $('#table8Filter2').val('all').change();
   }
 
   function resetEmailUsersPopup() {

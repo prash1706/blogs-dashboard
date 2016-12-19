@@ -37,6 +37,7 @@
     "prestart": "npm install",
     "postinstall": "bower install",
     "start": "node ./bin/www",
+    "nodemon":"nodemon ./bin/www -q",
     "pretest": "npm install",
     "test": "karma start karma.conf.js",
     "test-single-run": "karma start karma.conf.js  --single-run",
