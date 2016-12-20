@@ -1,4 +1,5 @@
-const CurrentVersion = { // Current = ibmNorthstar 1.7 or higher (1.7.1 etc)   or ibmNorthstarDev 1.6.152 or higher (1.6.153…)
+const CurrentVersion = {
+  // Current = ibmNorthstar 1.7 or higher (1.7.1 etc)   or ibmNorthstarDev 1.6.152 or higher (1.6.153…)
   version1: {
     themeName: "ibmNorthstar",
     version: "1.7"
@@ -12,7 +13,7 @@ var blogs = [];
 var blogData = {};
 var themeData = {};
 var pluginData = {};
-var userData = {};
+var userData = [];
 var pageData = {};
 var googleResults = null;
 var currentVersion = 'prod';
@@ -56,6 +57,9 @@ jQuery(function($) {
     } else if ($('.tableDiv').hasClass('card8')) {
       $('#table8').hide();
       $('.tableDiv').removeClass('card8');
+    } else if ($('.tableDiv').hasClass('card9')) {
+      $('#table9').hide();
+      $('.tableDiv').removeClass('card9');
     }
     $('#table1').hide();
     $('#table2').hide();
@@ -65,6 +69,7 @@ jQuery(function($) {
     $('#table6').hide();
     $('#table7').hide();
     $('#table8').hide();
+    $('#table9').hide();
 
     $('#table').show();
     $('.tableDiv').addClass(this.id);
@@ -87,6 +92,8 @@ jQuery(function($) {
       calTable7();
     } else if (this.id === 'card8') {
       calTable8();
+    } else if (this.id === 'card9') {
+      calTable9();
     }
   })
 
@@ -1919,16 +1926,16 @@ jQuery(function($) {
     $('#table8 table tbody').remove();
     var tr = '<tbody>';
     for (let blog of userData.rows) {
-      if (op1 == 'equal' && blogFilter != 'all' && blogFilter != blog.value.blogName){
+      if (op1 == 'equal' && blogFilter != 'all' && blogFilter != blog.value.blogName) {
         continue;
-      } else if (op1 == 'notequal' && (blogFilter == 'all' || blogFilter == blog.value.blogName)){
+      } else if (op1 == 'notequal' && (blogFilter == 'all' || blogFilter == blog.value.blogName)) {
         continue;
       }
       let userList = [];
       for (let user of blog.value.users) {
-        if (op2 == 'equal' && roleFilter != 'all' && roleFilter != user.roles){
+        if (op2 == 'equal' && roleFilter != 'all' && roleFilter != user.roles) {
           continue;
-        } else if (op2 == 'notequal' && (roleFilter == 'all' || roleFilter == user.roles)){
+        } else if (op2 == 'notequal' && (roleFilter == 'all' || roleFilter == user.roles)) {
           continue;
         }
         if (user.userEmail && userList.indexOf(user.userEmail) == -1) {
@@ -1950,7 +1957,95 @@ jQuery(function($) {
       "scrollY": '51vh',
       "scrollX": false
     });
+  }
 
+  // 9th Table
+  function calTable9() {
+    $('#table9').hide();
+    $('#tableLoading').show();
+    $('#table h2').text('Details: Plug-ins');
+    if (pluginData.rows != undefined) {
+      updateTable9();
+      console.log("pluginDetails", pluginData);
+      if ($('.tableDiv').hasClass('card5')) {
+        $('#table9').show();
+        $('#table9 table').DataTable().search('').draw();
+        $('#tableLoading').hide();
+      }
+    } else {
+      $.ajax({
+        url: '/pluginDetails?version=' + currentVersion,
+        success: function(result) {
+          $.ajax({
+            url: '/plugins?version=' + currentVersion,
+            success: function(statusResult) {
+              pluginData = result;
+              var status = {};
+              for (var i in statusResult.rows) {
+                var st = statusResult.rows[i];
+                status[st.id] = st.value.status;
+              }
+              for (var i in pluginData.rows) {
+                for (var j in pluginData.rows[i].value.pluginDetails) {
+                  var plugin = pluginData.rows[i].value.pluginDetails[j];
+                  plugin['active'] = plugin.status;
+                  plugin.status = status[plugin.pluginName];
+                }
+              }
+              console.log("pluginDetails", pluginData);
+              updateTable9();
+              if ($('.tableDiv').hasClass('card9')) {
+                $('#table9').show();
+                $('#table9 table').DataTable().search('').draw();
+                $('#tableLoading').hide();
+              }
+            },
+            error: function(error) {
+              pluginData = {};
+              console.log("pluginStatus Error", error);
+            }
+          })
+        },
+        error: function(error) {
+          pluginData = {};
+          console.log("pluginDetails Error", error);
+        }
+      })
+    }
+
+  }
+
+  function updateTable9() {
+    $('#table9 table').DataTable().destroy();
+    $('#table9 table tbody').remove();
+    var tr = '<tbody>';
+    var result = {};
+    for (i in pluginData.rows) {
+      var plugins = pluginData.rows[i].value.pluginDetails;
+      for (j in plugins) {
+        var plugin = plugins[j];
+        if (Object.keys(result).indexOf(plugin.pluginName) == -1) {
+          result[plugin.pluginName] = {
+            activeCount: 0,
+            inactiveCount: 0
+          };
+        }
+        if (plugin.active === 'active') {
+          result[plugin.pluginName].activeCount += 1;
+        } else {
+          result[plugin.pluginName].inactiveCount += 1;
+        }
+      };
+    }
+    for (plugin in result){
+      tr += '<tr><td>' + plugin + '</td><td>' + result[plugin].activeCount + '</td><td>' + result[plugin].activeCount + '</td></tr>';
+    }
+    $('#table9 table').append(tr + '</tbody>');
+    $('#table9 table').DataTable({
+      "iDisplayLength": 25,
+      "scrollY": '51vh',
+      "scrollX": false
+    });
   }
 
   function reset() {
@@ -1962,7 +2057,7 @@ jQuery(function($) {
     blogData = {};
     themeData = {};
     pluginData = {};
-    userData = {};
+    userData = [];
     pageData = {};
     currentVersion = 'prod';
     googleResults = null;
@@ -1986,19 +2081,7 @@ jQuery(function($) {
       success: function(result) {
         console.log('dashBoard', result);
         blogs = result;
-        $.ajax({
-          url: '/userDetails?version=' + currentVersion,
-          success: function(result) {
-            userData = result;
-            console.log("userDetails", userData);
-            loadSuccess();
-          },
-          error: function(error) {
-            userData = [];
-            console.error("userDetails Error", error);
-            loadFailed();
-          }
-        })
+        loadSuccess();
       },
       error: function(err) {
         console.error('dashBoard', err);
@@ -2006,6 +2089,20 @@ jQuery(function($) {
         loadFailed();
       }
     });
+
+    $.ajax({
+      url: '/userDetails?version=' + currentVersion,
+      success: function(result) {
+        userData = result;
+        console.log("userDetails", userData);
+        loadSuccess();
+      },
+      error: function(error) {
+        userData = 'error';
+        console.error("userDetails Error", error);
+        loadFailed();
+      }
+    })
 
     $.ajax({
       url: "/googleAnalytics?version=" + currentVersion,
@@ -2033,9 +2130,9 @@ jQuery(function($) {
   }
 
   function loadSuccess() {
-    if (googleResults == 'error' || blogs == 'error') {
+    if (googleResults == 'error' || blogs == 'error' || userData == 'error') {
       loadFailed();
-    } else if (googleResults != null && blogs.length != 0) {
+    } else if (googleResults != null && blogs.length != 0 && userData.length != 0) {
       calBlogCount();
       calStaThe();
       calPlugin();
