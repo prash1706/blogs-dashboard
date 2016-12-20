@@ -2038,7 +2038,7 @@ jQuery(function($) {
       };
     }
     for (plugin in result){
-      tr += '<tr><td>' + plugin + '</td><td>' + result[plugin].activeCount + '</td><td>' + result[plugin].activeCount + '</td></tr>';
+      tr += '<tr><td>' + plugin + '</td><td>' + result[plugin].activeCount + '</td><td>' + result[plugin].inactiveCount + '</td></tr>';
     }
     $('#table9 table').append(tr + '</tbody>');
     $('#table9 table').DataTable({
