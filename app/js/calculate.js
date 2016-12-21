@@ -2095,24 +2095,18 @@ jQuery(function($) {
     var tr = '<tbody>';
     var result = {};
     for (i in pageData.rows) {
+      var pubCount = 0,
+          unPubCount = 0;
       var pages = pageData.rows[i].value.pageDetails;
       for (j in pages) {
         var page = pages[j];
-        if (Object.keys(result).indexOf(page.postName) == -1) {
-          result[page.postName] = {
-            publish: 0,
-            inpublish: 0
-          };
-        }
         if (page.postStatus === 'publish') {
-          result[page.postName].publish += 1;
+          pubCount += 1;
         } else {
-          result[page.postName].inpublish += 1;
+          unPubCount += 1;
         }
       };
-    }
-    for (page in result){
-      tr += '<tr><td>' + page + '</td><td>' + result[page].publish + '</td><td>' + result[page].inpublish + '</td></tr>';
+      tr += '<tr><td>' + pageData.rows[i].value.blogName + '</td><td>' + pubCount + '</td><td>' + unPubCount + '</td></tr>';
     }
     $('#table10 table').append(tr + '</tbody>');
     $('#table10 table').DataTable({
