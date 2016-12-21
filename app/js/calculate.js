@@ -60,6 +60,9 @@ jQuery(function($) {
     } else if ($('.tableDiv').hasClass('card9')) {
       $('#table9').hide();
       $('.tableDiv').removeClass('card9');
+    } else if ($('.tableDiv').hasClass('card10')) {
+      $('#table10').hide();
+      $('.tableDiv').removeClass('card10');
     }
     $('#table1').hide();
     $('#table2').hide();
@@ -70,6 +73,7 @@ jQuery(function($) {
     $('#table7').hide();
     $('#table8').hide();
     $('#table9').hide();
+    $('#table10').hide();
 
     $('#table').show();
     $('.tableDiv').addClass(this.id);
@@ -94,6 +98,8 @@ jQuery(function($) {
       calTable8();
     } else if (this.id === 'card9') {
       calTable9();
+    } else if (this.id === 'card10') {
+      calTable10();
     }
   })
 
@@ -1967,7 +1973,7 @@ jQuery(function($) {
     if (pluginData.rows != undefined) {
       updateTable9();
       console.log("pluginDetails", pluginData);
-      if ($('.tableDiv').hasClass('card5')) {
+      if ($('.tableDiv').hasClass('card9')) {
         $('#table9').show();
         $('#table9 table').DataTable().search('').draw();
         $('#tableLoading').hide();
@@ -2042,6 +2048,74 @@ jQuery(function($) {
     }
     $('#table9 table').append(tr + '</tbody>');
     $('#table9 table').DataTable({
+      "iDisplayLength": 25,
+      "scrollY": '51vh',
+      "scrollX": false
+    });
+  }
+
+  // 9th Table
+  function calTable10() {
+    $('#table10').hide();
+    $('#tableLoading').show();
+    $('#table h2').text('Details: Plug-ins');
+    if (pageData.rows != undefined) {
+      updateTable10();
+      console.log("pageDetail", pageData);
+      if ($('.tableDiv').hasClass('card10')) {
+        $('#table10').show();
+        $('#table10 table').DataTable().search('').draw();
+        $('#tableLoading').hide();
+      }
+    } else {
+      $.ajax({
+        url: '/pageDetails?version=' + currentVersion,
+        success: function(result) {
+          pageData = result;
+          updateTable10();
+          if ($('.tableDiv').hasClass('card10')) {
+            $('#table10').show();
+            $('#table10 table').DataTable().search('').draw();
+            $('#tableLoading').hide();
+          }
+          console.log('pageDetails', pageData);
+        },
+        error: function(error) {
+          pageData = [];
+          console.error('pageDetails Error', error);
+        }
+      })
+    }
+
+  }
+
+  function updateTable10() {
+    $('#table10 table').DataTable().destroy();
+    $('#table10 table tbody').remove();
+    var tr = '<tbody>';
+    var result = {};
+    for (i in pageData.rows) {
+      var pages = pageData.rows[i].value.pageDetails;
+      for (j in pages) {
+        var page = pages[j];
+        if (Object.keys(result).indexOf(page.postName) == -1) {
+          result[page.postName] = {
+            publish: 0,
+            inpublish: 0
+          };
+        }
+        if (page.postStatus === 'publish') {
+          result[page.postName].publish += 1;
+        } else {
+          result[page.postName].inpublish += 1;
+        }
+      };
+    }
+    for (page in result){
+      tr += '<tr><td>' + page + '</td><td>' + result[page].publish + '</td><td>' + result[page].inpublish + '</td></tr>';
+    }
+    $('#table10 table').append(tr + '</tbody>');
+    $('#table10 table').DataTable({
       "iDisplayLength": 25,
       "scrollY": '51vh',
       "scrollX": false
