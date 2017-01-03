@@ -30,6 +30,7 @@ jQuery(function($) {
   dashBoardRun();
 
   $('.card').click(function() {
+    return false;
     if ($(this).hasClass('myTable')) {
       return;
     }
@@ -101,6 +102,119 @@ jQuery(function($) {
     } else if (this.id === 'card10') {
       calTable10();
     }
+  })
+
+  $('.ibm-sitenav-menu-container ul[role="menubar"] > li a').click(function() {
+    $('.ibm-highlight').removeClass('ibm-highlight');
+    var target = $(event.target);
+    var ancestor = target.parent().parent();
+    target.parent().addClass('ibm-highlight');
+    if (ancestor.attr('role')  == 'menu'){
+      ancestor.parent().addClass('ibm-highlight');
+    }
+    var tableDiv = $('.tableDiv');
+    var tarName = target.text();
+    $('.card').hide();
+    $('.tableDivChild').hide();
+    $('#table').show();
+    if (tableDiv.hasClass('card1')) {
+      $('#table1').hide();
+      tableDiv.removeClass('card1');
+    } else if (tableDiv.hasClass('card2')) {
+      $('#table2').hide();
+      tableDiv.removeClass('card2');
+    } else if (tableDiv.hasClass('card3')) {
+      $('#table3').hide();
+      tableDiv.removeClass('card3');
+    } else if (tableDiv.hasClass('card4')) {
+      $('#table4').hide();
+      tableDiv.removeClass('card4');
+    } else if (tableDiv.hasClass('card5')) {
+      $('#table5').hide();
+      tableDiv.removeClass('card5');
+    } else if (tableDiv.hasClass('card6')) {
+      $('#table6').hide();
+      tableDiv.removeClass('card6');
+    } else if (tableDiv.hasClass('card7')) {
+      $('#table7').hide();
+      tableDiv.removeClass('card7');
+    } else if (tableDiv.hasClass('card8')) {
+      $('#table8').hide();
+      tableDiv.removeClass('card8');
+    } else if (tableDiv.hasClass('card9')) {
+      $('#table9').hide();
+      tableDiv.removeClass('card9');
+    } else if (tableDiv.hasClass('card10')) {
+      $('#table10').hide();
+      tableDiv.removeClass('card10');
+    }
+    $('#main').addClass('showTable');
+    $('.myTable').removeClass('myTable');
+
+    switch (tarName) {
+      case 'Overview':
+        {
+          $('.card').show();
+          $('.myTable').removeClass('myTable');
+          $('#main').removeClass('showTable');
+          $('#table').hide();
+          break;
+        }
+      case 'Blogs':
+        {
+          $('.tableDiv').addClass('card1');
+          calTable1();
+          break;
+        }
+      case 'Themes':
+        {
+          $('.tableDiv').addClass('card2');
+          calTable2();
+          break;
+        }
+      case 'By Post':
+        {
+          $('.tableDiv').addClass('card4');
+          calTable4();
+          break;
+        }
+      case 'By Plug-in':
+        {
+          $('.tableDiv').addClass('card9');
+          calTable9();
+          break;
+        }
+      case 'By Page':
+        {
+          $('.tableDiv').addClass('card10');
+          calTable10();
+          break;
+        }
+      case 'By User':
+        {
+          $('.tableDiv').addClass('card8');
+          calTable8();
+          break;
+        }
+      case 'By Blog':
+        {
+          if (target.attr('data-cate') == 'post') {
+            $('.tableDiv').addClass('card4');
+            calTable4();
+          } else if (target.attr('data-cate') == 'page') {
+            $('.tableDiv').addClass('card7');
+            calTable7();
+          } else if (target.attr('data-cate') == 'plugin') {
+            $('.tableDiv').addClass('card5');
+            calTable5();
+          } else if (target.attr('data-cate') == 'user') {
+            $('.tableDiv').addClass('card6');
+            calTable6();
+          }
+          break;
+        }
+    }
+    return false;
   })
 
   $('p.toggleFilter button').click(function() {
@@ -1048,7 +1162,7 @@ jQuery(function($) {
   function calTable4() {
     $('#table4').hide();
     $('#tableLoading').show();
-    $('#table h2').text('Details: New posts');
+    $('#table h2').text('Post Details: By Blog');
     if (blogs.rows != undefined) {
       updateTable4();
       console.log('dashBoard', blogs);
@@ -1315,7 +1429,7 @@ jQuery(function($) {
   function calTable5() {
     $('#table5').hide();
     $('#tableLoading').show();
-    $('#table h2').text('Details: Plug-ins');
+    $('#table h2').text('Plug-in Details: By Blog');
     if (pluginData.rows != undefined) {
       updateTable5($('#table5Filter1').val(), $('#table5Filter2').val(), $('#table5Filter3').val(), $('#table5Filter4').val(), $('#table5Filter5').val());
       console.log("pluginDetails", pluginData);
@@ -1476,7 +1590,7 @@ jQuery(function($) {
   function calTable6() {
     $('#table6').hide();
     $('#tableLoading').show();
-    $('#table h2').text('Details: Users');
+    $('#table h2').text('User Details: By Blog');
     if (userData.rows != undefined) {
       updateTable6();
       console.log("userDetails", userData);
@@ -1791,11 +1905,12 @@ jQuery(function($) {
       }
     }
   }
+
   // 7th Table
   function calTable7() {
     $('#table7').hide();
     $('#tableLoading').show();
-    $('#table h2').text('Details: Pages');
+    $('#table h2').text('Page Details: By Blog');
     if (pageData.rows != undefined) {
       updateTable7($('#table7Filter1').val(), $('#table7Filter2').val(), $('#table7Filter3').val());
       console.log('tableDetails', pageData);
@@ -1894,7 +2009,7 @@ jQuery(function($) {
   function calTable8() {
     $('#table8').hide();
     $('#tableLoading').show();
-    $('#table h2').text('Details: Users');
+    $('#table h2').text('User Details: By Users');
     if (userData.rows != undefined) {
       updateFilter8();
       updateTable8();
@@ -1921,7 +2036,6 @@ jQuery(function($) {
     }
 
   }
-
 
   function updateTable8() {
     var op1 = $('#table8FilterOp1').val();
@@ -1969,7 +2083,7 @@ jQuery(function($) {
   function calTable9() {
     $('#table9').hide();
     $('#tableLoading').show();
-    $('#table h2').text('Details: Plug-ins');
+    $('#table h2').text('Plug-in Details: By Plug-in');
     if (pluginData.rows != undefined) {
       updateTable9();
       console.log("pluginDetails", pluginData);
@@ -2043,7 +2157,7 @@ jQuery(function($) {
         }
       };
     }
-    for (plugin in result){
+    for (plugin in result) {
       tr += '<tr><td>' + plugin + '</td><td>' + result[plugin].activeCount + '</td><td>' + result[plugin].inactiveCount + '</td></tr>';
     }
     $('#table9 table').append(tr + '</tbody>');
@@ -2058,7 +2172,7 @@ jQuery(function($) {
   function calTable10() {
     $('#table10').hide();
     $('#tableLoading').show();
-    $('#table h2').text('Details: Plug-ins');
+    $('#table h2').text('Page Details: By Page');
     if (pageData.rows != undefined) {
       updateTable10();
       console.log("pageDetail", pageData);
@@ -2096,7 +2210,7 @@ jQuery(function($) {
     var result = {};
     for (i in pageData.rows) {
       var pubCount = 0,
-          unPubCount = 0;
+        unPubCount = 0;
       var pages = pageData.rows[i].value.pageDetails;
       for (j in pages) {
         var page = pages[j];

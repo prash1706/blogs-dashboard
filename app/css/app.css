@@ -146,11 +146,39 @@ body.loading #logo img {
 }
 
 
+/* Navigation */
+
+section .ibm-sitenav-menu-container {
+  background-color: rgb(244, 244, 244);
+  border-bottom: 0px solid #ececec;
+  position: absolute;
+  top: 100px;
+  width: 100%;
+}
+
+.ibm-sitenav-menu-list {
+  padding-right: 20px;
+  position: relative;
+  right: 20px;
+}
+
+.ibm-sitenav-menu-list>ul>li.ibm-haschildlist>button {
+  background-color: rgb(244, 244, 244);
+}
+
+
+/* section .ibm-sitenav-menu-list {
+  margin-right: -330px;
+}
+
+ */
+
+
 /*Card*/
 
 div#main {
   width: 1165px;
-  margin: 50px auto 0 auto;
+  margin: 70px auto 0 auto;
   color: black;
 }
 
@@ -613,6 +641,7 @@ table img.wrong {
 #table6 tbody tr td:nth-child(6) {
   text-align: center;
 }
+
 
 /* table8 */
 
