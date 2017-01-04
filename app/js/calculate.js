@@ -172,7 +172,7 @@ jQuery(function($) {
           calTable2();
           break;
         }
-      case 'By Post':
+      case 'Posts':
         {
           $('.tableDiv').addClass('card4');
           calTable4();
@@ -198,10 +198,7 @@ jQuery(function($) {
         }
       case 'By Blog':
         {
-          if (target.attr('data-cate') == 'post') {
-            $('.tableDiv').addClass('card4');
-            calTable4();
-          } else if (target.attr('data-cate') == 'page') {
+          if (target.attr('data-cate') == 'page') {
             $('.tableDiv').addClass('card7');
             calTable7();
           } else if (target.attr('data-cate') == 'plugin') {
@@ -1162,7 +1159,7 @@ jQuery(function($) {
   function calTable4() {
     $('#table4').hide();
     $('#tableLoading').show();
-    $('#table h2').text('Post Details: By Blog');
+    $('#table h2').text('Details: Posts');
     if (blogs.rows != undefined) {
       updateTable4();
       console.log('dashBoard', blogs);
