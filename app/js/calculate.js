@@ -104,7 +104,7 @@ jQuery(function($) {
     }
   })
 
-  $('.ibm-sitenav-menu-container ul[role="menubar"] > li a').click(function() {
+  $('.ibm-sitenav-menu-container ul[role="menubar"] > li a').click(function(event) {
     $('.ibm-highlight').removeClass('ibm-highlight');
     var target = $(event.target);
     var ancestor = target.parent().parent();
