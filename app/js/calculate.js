@@ -30,77 +30,62 @@ jQuery(function($) {
   dashBoardRun();
 
   $('.card').click(function() {
-    return false;
-    if ($(this).hasClass('myTable')) {
-      return;
-    }
-    if ($('.tableDiv').hasClass('card1')) {
-      $('#table1').hide();
-      $('.tableDiv').removeClass('card1');
-    } else if ($('.tableDiv').hasClass('card2')) {
-      $('#table2').hide();
-      $('.tableDiv').removeClass('card2');
-    } else if ($('.tableDiv').hasClass('card3')) {
-      $('#table3').hide();
-      $('.tableDiv').removeClass('card3');
-    } else if ($('.tableDiv').hasClass('card4')) {
-      $('#table4').hide();
-      $('.tableDiv').removeClass('card4');
-    } else if ($('.tableDiv').hasClass('card5')) {
-      $('#table5').hide();
-      $('.tableDiv').removeClass('card5');
-    } else if ($('.tableDiv').hasClass('card6')) {
-      $('#table6').hide();
-      $('.tableDiv').removeClass('card6');
-    } else if ($('.tableDiv').hasClass('card7')) {
-      $('#table7').hide();
-      $('.tableDiv').removeClass('card7');
-    } else if ($('.tableDiv').hasClass('card8')) {
-      $('#table8').hide();
-      $('.tableDiv').removeClass('card8');
-    } else if ($('.tableDiv').hasClass('card9')) {
-      $('#table9').hide();
-      $('.tableDiv').removeClass('card9');
-    } else if ($('.tableDiv').hasClass('card10')) {
-      $('#table10').hide();
-      $('.tableDiv').removeClass('card10');
-    }
-    $('#table1').hide();
-    $('#table2').hide();
-    $('#table3').hide();
-    $('#table4').hide();
-    $('#table5').hide();
-    $('#table6').hide();
-    $('#table7').hide();
-    $('#table8').hide();
-    $('#table9').hide();
-    $('#table10').hide();
-
+    $('.card').hide();
     $('#table').show();
-    $('.tableDiv').addClass(this.id);
-    $('#main').addClass('showTable');
-    $('.myTable').removeClass('myTable');
-    $(this).addClass('myTable');
-    if (this.id === 'card1') {
-      calTable1();
-    } else if (this.id === 'card2') {
-      calTable2();
-    } else if (this.id === 'card3') {
-      calTable3();
-    } else if (this.id === 'card4') {
-      calTable4();
-    } else if (this.id === 'card5') {
-      calTable5();
-    } else if (this.id === 'card6') {
-      calTable6();
-    } else if (this.id === 'card7') {
-      calTable7();
-    } else if (this.id === 'card8') {
-      calTable8();
-    } else if (this.id === 'card9') {
-      calTable9();
-    } else if (this.id === 'card10') {
-      calTable10();
+    $('#tableDiv').addClass(this.id);
+    $('.ibm-highlight').removeClass('ibm-highlight');
+    switch (this.id) {
+      case 'card1':
+        {
+          calTable1();
+          $('#tableDiv').addClass('card1');
+          $('.ibm-sitenav-menu-list>ul>li:nth-child(2)').addClass('ibm-highlight');
+          break;
+        }
+      case 'card2':
+        {
+          calTable2();
+          $('#tableDiv').addClass('card2');
+          $('.ibm-sitenav-menu-list>ul>li:nth-child(3)').addClass('ibm-highlight');
+          break;
+        }
+      case 'card3':
+        {
+          calTable3();
+          $('#tableDiv').addClass('card3');
+          break;
+        }
+      case 'card4':
+        {
+          calTable4();
+          $('#tableDiv').addClass('card4');
+          $('.ibm-sitenav-menu-list>ul>li:nth-child(4)').addClass('ibm-highlight');
+          break;
+        }
+      case 'card5':
+        {
+          calTable5();
+          $('#tableDiv').addClass('card5');
+          $('.ibm-sitenav-menu-list>ul>li:nth-child(6)').addClass('ibm-highlight');
+          $('.ibm-sitenav-menu-list>ul>li:nth-child(6)>ul>li:first-child').addClass('ibm-highlight');
+          break;
+        }
+      case 'card6':
+        {
+          calTable6();
+          $('#tableDiv').addClass('card6');
+          $('.ibm-sitenav-menu-list>ul>li:nth-child(7)').addClass('ibm-highlight');
+          $('.ibm-sitenav-menu-list>ul>li:nth-child(7)>ul>li:first-child').addClass('ibm-highlight');
+          break;
+        }
+      case 'card7':
+        {
+          calTable7();
+          $('#tableDiv').addClass('card7');
+          $('.ibm-sitenav-menu-list>ul>li:nth-child(5)').addClass('ibm-highlight');
+          $('.ibm-sitenav-menu-list>ul>li:nth-child(5)>ul>li:first-child').addClass('ibm-highlight');
+          break;
+        }
     }
   })
 
@@ -109,10 +94,10 @@ jQuery(function($) {
     var target = $(event.target);
     var ancestor = target.parent().parent();
     target.parent().addClass('ibm-highlight');
-    if (ancestor.attr('role')  == 'menu'){
+    if (ancestor.attr('role') == 'menu') {
       ancestor.parent().addClass('ibm-highlight');
     }
-    var tableDiv = $('.tableDiv');
+    var tableDiv = $('#tableDiv');
     var tarName = target.text();
     $('.card').hide();
     $('.tableDivChild').hide();
@@ -148,64 +133,60 @@ jQuery(function($) {
       $('#table10').hide();
       tableDiv.removeClass('card10');
     }
-    $('#main').addClass('showTable');
-    $('.myTable').removeClass('myTable');
 
     switch (tarName) {
       case 'Overview':
         {
           $('.card').show();
-          $('.myTable').removeClass('myTable');
-          $('#main').removeClass('showTable');
           $('#table').hide();
           break;
         }
       case 'Blogs':
         {
-          $('.tableDiv').addClass('card1');
+          $('#tableDiv').addClass('card1');
           calTable1();
           break;
         }
       case 'Themes':
         {
-          $('.tableDiv').addClass('card2');
+          $('#tableDiv').addClass('card2');
           calTable2();
           break;
         }
       case 'Posts':
         {
-          $('.tableDiv').addClass('card4');
+          $('#tableDiv').addClass('card4');
           calTable4();
           break;
         }
       case 'By Plug-in':
         {
-          $('.tableDiv').addClass('card9');
+          $('#tableDiv').addClass('card9');
           calTable9();
           break;
         }
       case 'By Page':
         {
-          $('.tableDiv').addClass('card10');
+          $('#tableDiv').addClass('card10');
           calTable10();
           break;
         }
       case 'By User':
         {
-          $('.tableDiv').addClass('card8');
+          $('#tableDiv').addClass('card8');
           calTable8();
           break;
         }
       case 'By Blog':
         {
           if (target.attr('data-cate') == 'page') {
-            $('.tableDiv').addClass('card7');
+            $('#tableDiv').addClass('card7');
             calTable7();
           } else if (target.attr('data-cate') == 'plugin') {
-            $('.tableDiv').addClass('card5');
+            $('#tableDiv').addClass('card5');
             calTable5();
           } else if (target.attr('data-cate') == 'user') {
-            $('.tableDiv').addClass('card6');
+            $('#tableDiv').addClass('card6');
             calTable6();
           }
           break;
@@ -258,7 +239,7 @@ jQuery(function($) {
 
   $('.table1Filter').on("change", function() {
     if (blogData.rows != undefined) {
-      updateTable1($('#table1Filter1').val(), $('#table1Filter2').val());
+      updateTable1();
     }
   });
 
@@ -270,13 +251,13 @@ jQuery(function($) {
 
   $('.table5Filter').on("change", function() {
     if (pluginData.rows != undefined) {
-      updateTable5($('#table5Filter1').val(), $('#table5Filter2').val(), $('#table5Filter3').val(), $('#table5Filter4').val(), $('#table5Filter5').val());
+      updateTable5();
     }
   });
 
   $('.table7Filter').on("change", function() {
     if (pageData.rows != undefined) {
-      updateTable7($('#table7Filter1').val(), $('#table7Filter2').val(), $('#table7Filter3').val());
+      updateTable7();
     }
   });
 
@@ -285,12 +266,6 @@ jQuery(function($) {
       updateTable8();
     }
   });
-
-  $('#backToMenu').click(function() {
-    $('.myTable').removeClass('myTable');
-    $('#main').removeClass('showTable');
-    $('#table').hide();
-  })
 
   $('#switchVersion').on("change", function() {
     reset();
@@ -305,6 +280,18 @@ jQuery(function($) {
 
   $('#emailUsersPopup').hover(function() {}, function() {
     $('#emailUsersPopup').hide();
+  })
+
+  $('.emailUsers button').click(function() {
+    if (!$(this).hasClass('disabled')) {
+      var top = $(this).offset().top;
+      var left = $(this).offset().left;
+      $('#emailUsersPopup').css({
+        top: top + 18,
+        left: left - 10
+      });
+      $('#emailUsersPopup').show();
+    }
   })
 
   $('input:radio[name="allorspe"]').change(function() {
@@ -469,9 +456,9 @@ jQuery(function($) {
     $('#tableLoading').show();
     $('#table h2').text('Details: Blogs');
     if (blogData.rows != undefined) {
-      updateTable1($('#table1Filter1').val(), $('#table1Filter2').val());
+      updateTable1();
       console.log('blogDetails', blogData);
-      if ($('.tableDiv').hasClass('card1')) {
+      if ($('#tableDiv').hasClass('card1')) {
         $('#table1').show();
         $('#table1 table').DataTable().search('').draw();
         $('#tableLoading').hide();
@@ -483,8 +470,8 @@ jQuery(function($) {
           blogData = result;
           console.log('blogDetails', result);
           updateFilter1();
-          updateTable1($('#table1Filter1').val(), $('#table1Filter2').val());
-          if ($('.tableDiv').hasClass('card1')) {
+          updateTable1();
+          if ($('#tableDiv').hasClass('card1')) {
             $('#table1').show();
             $('#table1 table').DataTable().search('').draw();
             $('#tableLoading').hide();
@@ -524,7 +511,9 @@ jQuery(function($) {
     }
   }
 
-  function updateTable1(filterCountry, filterLanguage) {
+  function updateTable1() {
+    var filterCountry = $('#table1Filter1').val();
+    var filterLanguage = $('#table1Filter2').val();
     $('#table1 table').DataTable().destroy();
     $('#table1 table tbody').remove();
     var tr = '<tbody>';
@@ -579,18 +568,6 @@ jQuery(function($) {
     }).on('deselect', function(e, dt, type, indexes) {
       selectRows();
     });
-
-    $('#table1 .emailUsers button').click(function() {
-      if (!$(this).hasClass('disabled')) {
-        var top = $(this).offset().top;
-        var left = $(this).offset().left;
-        $('#emailUsersPopup').css({
-          top: top + 18,
-          left: left - 10
-        });
-        $('#emailUsersPopup').show();
-      }
-    })
 
     var blogNames = [];
     var addressStr = '';
@@ -650,7 +627,6 @@ jQuery(function($) {
       $("#emailUsersPopup input#conRolePopup").prop('disabled', (conCount !== 0) ? false : true);
       $("#emailUsersPopup input#siteRolePopup").prop('disabled', (siteCount !== 0) ? false : true);
       $("#emailUsersPopup input#adminRolePopup").prop('disabled', (adminCount !== 0) ? false : true);
-
     }
 
     $('#emailUsersPopup input[name="allorspe"]').change(function() {
@@ -769,7 +745,7 @@ jQuery(function($) {
     if (themeData.rows != undefined) {
       updateTable2();
       console.log('themeDetails', themeData);
-      if ($('.tableDiv').hasClass('card2')) {
+      if ($('#tableDiv').hasClass('card2')) {
         $('#table2').show();
         $('#table2 table').DataTable().search('').draw();
         $('#tableLoading').hide();
@@ -782,7 +758,7 @@ jQuery(function($) {
           console.log('themeDetails', result);
           updateFilter2();
           updateTable2();
-          if ($('.tableDiv').hasClass('card2')) {
+          if ($('#tableDiv').hasClass('card2')) {
             $('#table2').show();
             $('#table2 table').DataTable().search('').draw();
             $('#tableLoading').hide();
@@ -928,18 +904,6 @@ jQuery(function($) {
     }).on('deselect', function(e, dt, type, indexes) {
       selectRows();
     });
-
-    $('#table2 .emailUsers button').click(function() {
-      if (!$(this).hasClass('disabled')) {
-        var top = $(this).offset().top;
-        var left = $(this).offset().left;
-        $('#emailUsersPopup').css({
-          top: top + 18,
-          left: left - 10
-        });
-        $('#emailUsersPopup').show();
-      }
-    })
 
     var blogNames = [];
     var addressStr = '';
@@ -1118,7 +1082,7 @@ jQuery(function($) {
     if (blogs.rows != undefined) {
       updateTable3();
       console.log('dashBoard', blogs);
-      if ($('.tableDiv').hasClass('card3')) {
+      if ($('#tableDiv').hasClass('card3')) {
         $('#table3').show();
         $('#table3 table').DataTable().search('').draw();
         $('#tableLoading').hide();
@@ -1163,7 +1127,7 @@ jQuery(function($) {
     if (blogs.rows != undefined) {
       updateTable4();
       console.log('dashBoard', blogs);
-      if ($('.tableDiv').hasClass('card4')) {
+      if ($('#tableDiv').hasClass('card4')) {
         $('#table4').show();
         $('#table4 table').DataTable().search('').draw();
         $('#tableLoading').hide();
@@ -1239,18 +1203,6 @@ jQuery(function($) {
       }).on('deselect', function(e, dt, type, indexes) {
         selectRows();
       });
-
-      $('#table4 .emailUsers button').click(function() {
-        if (!$(this).hasClass('disabled')) {
-          var top = $(this).offset().top;
-          var left = $(this).offset().left;
-          $('#emailUsersPopup').css({
-            top: top + 18,
-            left: left - 10
-          });
-          $('#emailUsersPopup').show();
-        }
-      })
 
       var blogNames = [];
       var addressStr = '';
@@ -1428,9 +1380,9 @@ jQuery(function($) {
     $('#tableLoading').show();
     $('#table h2').text('Plug-in Details: By Blog');
     if (pluginData.rows != undefined) {
-      updateTable5($('#table5Filter1').val(), $('#table5Filter2').val(), $('#table5Filter3').val(), $('#table5Filter4').val(), $('#table5Filter5').val());
       console.log("pluginDetails", pluginData);
-      if ($('.tableDiv').hasClass('card5')) {
+      updateTable5();
+      if ($('#tableDiv').hasClass('card5')) {
         $('#table5').show();
         $('#table5 table').DataTable().search('').draw();
         $('#tableLoading').hide();
@@ -1458,8 +1410,8 @@ jQuery(function($) {
               console.log("status", status);
               console.log("pluginDetails", pluginData);
               updateFilter5();
-              updateTable5($('#table5Filter1').val(), $('#table5Filter2').val(), $('#table5Filter3').val(), $('#table5Filter4').val(), $('#table5Filter5').val());
-              if ($('.tableDiv').hasClass('card5')) {
+              updateTable5();
+              if ($('#tableDiv').hasClass('card5')) {
                 $('#table5').show();
                 $('#table5 table').DataTable().search('').draw();
                 $('#tableLoading').hide();
@@ -1516,8 +1468,12 @@ jQuery(function($) {
     }
   }
 
-  function updateTable5(filterPlugin, filterBlog, filterActive, filterStatus, filterApproved) {
-    console.log(filterPlugin, filterBlog, filterActive, filterStatus, filterApproved);
+  function updateTable5() {
+    var filterPlugin = $('#table5Filter1').val();
+    var filterBlog = $('#table5Filter2').val();
+    var filterActive = $('#table5Filter3').val();
+    var filterStatus = $('#table5Filter4').val();
+    var filterApproved = $('#table5Filter5').val();
     $('#table5 table').DataTable().destroy();
     $('#table5 table tbody').remove();
     var tr = '<tbody>';
@@ -1591,7 +1547,7 @@ jQuery(function($) {
     if (userData.rows != undefined) {
       updateTable6();
       console.log("userDetails", userData);
-      if ($('.tableDiv').hasClass('card6')) {
+      if ($('#tableDiv').hasClass('card6')) {
         $('#table6').show();
         $('#table6 table').DataTable().search('').draw();
         $('#tableLoading').hide();
@@ -1720,18 +1676,6 @@ jQuery(function($) {
       }).on('deselect', function(e, dt, type, indexes) {
         selectRows();
       });
-
-      $('#table6 .emailUsers button').click(function() {
-        if (!$(this).hasClass('disabled')) {
-          var top = $(this).offset().top;
-          var left = $(this).offset().left;
-          $('#emailUsersPopup').css({
-            top: top + 18,
-            left: left - 10
-          });
-          $('#emailUsersPopup').show();
-        }
-      })
 
       var blogNames = [];
       var addressStr = '';
@@ -1909,9 +1853,9 @@ jQuery(function($) {
     $('#tableLoading').show();
     $('#table h2').text('Page Details: By Blog');
     if (pageData.rows != undefined) {
-      updateTable7($('#table7Filter1').val(), $('#table7Filter2').val(), $('#table7Filter3').val());
+      updateTable7();
       console.log('tableDetails', pageData);
-      if ($('.tableDiv').hasClass('card7')) {
+      if ($('#tableDiv').hasClass('card7')) {
         $('#table7').show();
         $('#table7 table').DataTable().search('').draw();
         $('#tableLoading').hide();
@@ -1922,8 +1866,8 @@ jQuery(function($) {
         success: function(result) {
           pageData = result;
           updateFilter7();
-          updateTable7($('#table7Filter1').val(), $('#table7Filter2').val(), $('#table7Filter3').val());
-          if ($('.tableDiv').hasClass('card7')) {
+          updateTable7();
+          if ($('#tableDiv').hasClass('card7')) {
             $('#table7').show();
             $('#table7 table').DataTable().search('').draw();
             $('#tableLoading').hide();
@@ -1974,7 +1918,10 @@ jQuery(function($) {
     }
   }
 
-  function updateTable7(filterPage, filterBlog, filterStatus) {
+  function updateTable7() {
+    var filterPage = $('#table7Filter1').val();
+    var filterBlog = $('#table7Filter2').val();
+    var filterStatus = $('#table7Filter3').val();
     $('#table7 table').DataTable().destroy();
     $('#table7 table tbody').remove();
     var tr = '<tbody>';
@@ -2011,7 +1958,7 @@ jQuery(function($) {
       updateFilter8();
       updateTable8();
       console.log("userDetails", userData);
-      if ($('.tableDiv').hasClass('card8')) {
+      if ($('#tableDiv').hasClass('card8')) {
         $('#table8').show();
         $('#table8 table').DataTable().search('').draw();
         $('#tableLoading').hide();
@@ -2069,6 +2016,7 @@ jQuery(function($) {
       var left = $(this).offset().left;
       blogMenu(name, top, left);
     });
+
     $('#table8 table').DataTable({
       "iDisplayLength": 25,
       "scrollY": '51vh',
@@ -2084,7 +2032,7 @@ jQuery(function($) {
     if (pluginData.rows != undefined) {
       updateTable9();
       console.log("pluginDetails", pluginData);
-      if ($('.tableDiv').hasClass('card9')) {
+      if ($('#tableDiv').hasClass('card9')) {
         $('#table9').show();
         $('#table9 table').DataTable().search('').draw();
         $('#tableLoading').hide();
@@ -2111,7 +2059,7 @@ jQuery(function($) {
               }
               console.log("pluginDetails", pluginData);
               updateTable9();
-              if ($('.tableDiv').hasClass('card9')) {
+              if ($('#tableDiv').hasClass('card9')) {
                 $('#table9').show();
                 $('#table9 table').DataTable().search('').draw();
                 $('#tableLoading').hide();
@@ -2173,7 +2121,7 @@ jQuery(function($) {
     if (pageData.rows != undefined) {
       updateTable10();
       console.log("pageDetail", pageData);
-      if ($('.tableDiv').hasClass('card10')) {
+      if ($('#tableDiv').hasClass('card10')) {
         $('#table10').show();
         $('#table10 table').DataTable().search('').draw();
         $('#tableLoading').hide();
@@ -2184,7 +2132,7 @@ jQuery(function($) {
         success: function(result) {
           pageData = result;
           updateTable10();
-          if ($('.tableDiv').hasClass('card10')) {
+          if ($('#tableDiv').hasClass('card10')) {
             $('#table10').show();
             $('#table10 table').DataTable().search('').draw();
             $('#tableLoading').hide();
@@ -2228,6 +2176,10 @@ jQuery(function($) {
   }
 
   function reset() {
+    $('.card').show();
+    $('#table').hide();
+    $('.ibm-highlight').removeClass('ibm-highlight');
+    $('.ibm-sitenav-menu-list>ul>li:nth-child(1)').addClass('ibm-highlight');
     $('#loadingMockupSpinner div.ibm-spinner').css('animation', startStyle);
     $('#loadingText').text('LOADING');
     $('#loadingMockupSpinner p.ibm-ind-link').hide();
@@ -2249,8 +2201,6 @@ jQuery(function($) {
     $('#card6 .cardValue').text('');
     $('#card7 .cardValue').text('');
     $('#card8 .cardValue').text('');
-    $('.myTable').removeClass('myTable');
-    $('#main').removeClass('showTable');
     $('#table').hide();
   }
 

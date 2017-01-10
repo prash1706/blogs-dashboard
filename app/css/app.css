@@ -111,6 +111,8 @@ body.loading #logo img {
 #currentTime {
   float: right;
   margin-top: 12px;
+  min-width: 400px;
+  text-align: right;
 }
 
 #currentTime span {
@@ -123,62 +125,31 @@ body.loading #logo img {
   line-height: 26px;
 }
 
-#backToMenu:hover {
-  text-decoration: underline;
-}
-
-#main #backToMenu {
-  position: absolute;
-  display: none;
-  top: 113px;
-  cursor: pointer;
-}
-
-#backToMenu img {
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
-  margin-bottom: -3px;
-}
-
-#main.showTable #backToMenu {
-  display: block;
-}
-
 
 /* Navigation */
 
 section .ibm-sitenav-menu-container {
   background-color: rgb(244, 244, 244);
   border-bottom: 0px solid #ececec;
-  position: absolute;
-  top: 100px;
   width: 100%;
-}
-
-.ibm-sitenav-menu-list {
-  padding-right: 20px;
-  position: relative;
-  right: 20px;
 }
 
 .ibm-sitenav-menu-list>ul>li.ibm-haschildlist>button {
   background-color: rgb(244, 244, 244);
 }
 
-
-/* section .ibm-sitenav-menu-list {
-  margin-right: -330px;
+.ibm-sitenav-menu-list {
+  margin-right: -400px;
 }
 
- */
-
-
+.ibm-sitenav-menu-list li ul.ibm-align-right {
+    right: auto !important;
+}
 /*Card*/
 
 div#main {
   width: 1165px;
-  margin: 70px auto 0 auto;
+  margin: 30px auto 0 auto;
   color: black;
 }
 
@@ -200,26 +171,12 @@ div.card {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.349019607843137);
 }
 
-div.card.myTable {
-  cursor: auto;
-}
-
-div.card:nth-child(4),
-div.card:nth-child(7),
-div.card:nth-child(10) {
+div.card:nth-child(3n) {
   margin-right: 0;
 }
 
 body.loading div.card {
   cursor: default;
-}
-
-.showTable div.card {
-  display: none;
-}
-
-.showTable div.card.myTable {
-  display: block;
 }
 
 div.clearFloat {
@@ -238,22 +195,6 @@ div.card:hover a {
 
 div.card a.showDetail {
   display: block;
-}
-
-div.card a.hideDetail {
-  display: none;
-}
-
-div.card.myTable a.showDetail {
-  display: none;
-}
-
-div.card.myTable a.hideDetail {
-  display: block;
-}
-
-div.card.myTable:hover a.hideDetail {
-  text-decoration: underline;
 }
 
 div.card div.right span.ibm-spinner {
@@ -284,38 +225,31 @@ a.hideDetail {
   height: 5px;
 }
 
-#card1:hover .hoverDiv,
-#card1.myTable .hoverDiv {
+#card1:hover .hoverDiv {
   background-color: #E74C3C;
 }
 
-#card2:hover .hoverDiv,
-#card2.myTable .hoverDiv {
+#card2:hover .hoverDiv {
   background-color: #16A085;
 }
 
-#card3:hover .hoverDiv,
-#card3.myTable .hoverDiv {
+#card3:hover .hoverDiv {
   background-color: #F1C40F;
 }
 
-#card4:hover .hoverDiv,
-#card4.myTable .hoverDiv {
+#card4:hover .hoverDiv {
   background-color: #76BCFF;
 }
 
-#card5:hover .hoverDiv,
-#card5.myTable .hoverDiv {
+#card5:hover .hoverDiv {
   background-color: #B24A7D;
 }
 
-#card6:hover .hoverDiv,
-#card6.myTable .hoverDiv {
+#card6:hover .hoverDiv {
   background-color: #807FFF;
 }
 
-#card7:hover .hoverDiv,
-#card7.myTable .hoverDiv {
+#card7:hover .hoverDiv {
   background-color: #FF6D3A;
 }
 
@@ -380,7 +314,7 @@ select#switchVersion {
   display: none;
 }
 
-.tableDiv {
+#tableDiv {
   background-attachment: scroll;
   background-clip: border-box;
   background-color: rgb(255, 255, 255);
@@ -418,21 +352,21 @@ select#switchVersion {
   position: relative;
 }
 
-.tableDiv thead {
+#tableDiv thead {
   background-color: #F5F5F5
 }
 
-.tableDiv th,
-.tableDiv td {
+#tableDiv th,
+#tableDiv td {
   border-right: 1px solid #E6E6E6;
 }
 
-.tableDiv table tbody:nth-child(3) td {
+#tableDiv table tbody:nth-child(3) td {
   background-color: #F9F9F9;
   font-weight: bold;
 }
 
-.tableDiv table tbody:nth-child(3) tr:nth-child(1) td {
+#tableDiv table tbody:nth-child(3) tr:nth-child(1) td {
   border-top: 2px solid #e0e0e0;
 }
 
@@ -659,77 +593,51 @@ table img.wrong {
   margin-left: -20px;
 }
 
-.tableDiv.card1 .hoverTDiv {
+#tableDiv.card1 .hoverTDiv {
   background-color: #E74C3C;
 }
 
-.tableDiv.card2 .hoverTDiv {
+#tableDiv.card2 .hoverTDiv {
   background-color: #16A085;
 }
 
-.tableDiv.card3 .hoverTDiv {
+#tableDiv.card3 .hoverTDiv {
   background-color: #F1C40F;
 }
 
-.tableDiv.card4 .hoverTDiv {
+#tableDiv.card4 .hoverTDiv {
   background-color: #76BCFF;
 }
 
-.tableDiv.card5 .hoverTDiv {
+#tableDiv.card5 .hoverTDiv {
   background-color: #B24A7D;
 }
 
-.tableDiv.card6 .hoverTDiv {
+#tableDiv.card6 .hoverTDiv {
   background-color: #807FFF;
 }
 
-.tableDiv.card7 .hoverTDiv {
+#tableDiv.card7 .hoverTDiv {
   background-color: #FF6D3A;
 }
 
-.tableDiv.card8 .hoverTDiv {
+#tableDiv.card8 .hoverTDiv {
   background-color: #FF6D3A;
 }
 
-.tableDiv.card9 .hoverTDiv {
-  background-color: #FF6D3A;
-}
-.tableDiv.card10 .hoverTDiv {
-  background-color: #FF6D3A;
-}
-.tableDiv.card10 .hoverTDiv {
+#tableDiv.card9 .hoverTDiv {
   background-color: #FF6D3A;
 }
 
-.tableDiv #table1 {
-  display: none;
+#tableDiv.card10 .hoverTDiv {
+  background-color: #FF6D3A;
 }
 
-.tableDiv #table2 {
-  display: none;
+#tableDiv.card10 .hoverTDiv {
+  background-color: #FF6D3A;
 }
 
-.tableDiv #table3 {
-  display: none;
-}
-
-.tableDiv #table4 {
-  display: none;
-}
-
-.tableDiv #table5 {
-  display: none;
-}
-
-.tableDiv #table6 {
-  display: none;
-}
-
-.tableDiv #table7 {
-  display: none;
-}
-
-.tableDiv #table8 {
+#tableDiv .tableDivChild {
   display: none;
 }
 
