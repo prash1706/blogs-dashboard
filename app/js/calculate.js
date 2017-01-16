@@ -25,6 +25,7 @@ clipboard.on('success', function(e) {
   $('.copyAddressBtn').text('Copied!');
 });
 
+
 jQuery(function($) {
   reset();
   dashBoardRun();
@@ -195,6 +196,12 @@ jQuery(function($) {
     return false;
   })
 
+  $('#switchVersion').on("change", function() {
+    reset();
+    currentVersion = $('#switchVersion').val();
+    dashBoardRun();
+  });
+
   $('p.toggleFilter button').click(function() {
     if ($(this).hasClass('showFilter')) {
       $(this).removeClass('showFilter');
@@ -237,41 +244,30 @@ jQuery(function($) {
     IBMCore.common.widget.overlay.show('userDetailOverlay');
   })
 
-  $('.table1Filter').on("change", function() {
-    if (blogData.rows != undefined) {
-      updateTable1();
+  $('.filter').on('change', function(event) {
+    var classes = $(event.target).attr('class');
+    if (classes.indexOf('table1Filter') !== -1) {
+      if (blogData.rows != undefined) {
+        updateTable1();
+      }
+    } else if (classes.indexOf('table2Filter') !== -1) {
+      if (themeData.rows != undefined) {
+        updateTable2();
+      }
+    } else if (classes.indexOf('table5Filter') !== -1) {
+      if (pluginData.rows != undefined) {
+        updateTable5();
+      }
+    } else if (classes.indexOf('table7Filter') !== -1) {
+      if (pageData.rows != undefined) {
+        updateTable7();
+      }
+    } else if (classes.indexOf('table8Filter') !== -1) {
+      if (userData.rows != undefined) {
+        updateTable8();
+      }
     }
-  });
-
-  $('.table2Filter').on("change", function() {
-    if (themeData.rows != undefined) {
-      updateTable2();
-    }
-  });
-
-  $('.table5Filter').on("change", function() {
-    if (pluginData.rows != undefined) {
-      updateTable5();
-    }
-  });
-
-  $('.table7Filter').on("change", function() {
-    if (pageData.rows != undefined) {
-      updateTable7();
-    }
-  });
-
-  $('.table8Filter').on("change", function() {
-    if (userData.rows != undefined) {
-      updateTable8();
-    }
-  });
-
-  $('#switchVersion').on("change", function() {
-    reset();
-    currentVersion = $('#switchVersion').val();
-    dashBoardRun();
-  });
+  })
 
   $('#moreInfoDiv').hover(function() {}, function() {
     $('#moreInfoDiv').hide();
@@ -640,7 +636,7 @@ jQuery(function($) {
         $('#sendEmailBtn').prop('disabled', false);
         $('#copyEmailBtn').removeClass('disabled');
       }
-      calEmails();
+      calEmails(blogNames);
     })
 
     $('#emailUsersPopup input[name="typeInSpe"]').change(function() {
@@ -651,7 +647,7 @@ jQuery(function($) {
         $('#sendEmailBtn').prop('disabled', false);
         $('#copyEmailBtn').removeClass('disabled');
       }
-      calEmails();
+      calEmails(blogNames);
     })
 
 
@@ -664,7 +660,7 @@ jQuery(function($) {
       if (!$(this).hasClass('disabled')) {
         $('.copyAddressBtn').text('Copy addresses');
         if (addressStr === '') {
-          calEmails();
+          calEmails(blogNames);
         }
       }
     })
@@ -676,65 +672,6 @@ jQuery(function($) {
         table.rows().deselect();
       }
     });
-
-    function calEmails() {
-      addressStr = '';
-      $('.copyAddressBtn').text('Copy addresses');
-      var emails = [];
-      if ($('#emailUsersPopup input#allRolesPopup').prop('checked')) {
-        for (var i in userData.rows) {
-          var blog = userData.rows[i]
-          if (blogNames.indexOf(blog.id) == -1) {
-            continue;
-          }
-          var users = blog.value.users;
-          for (var j in users) {
-            var addr = users[j].userEmail;
-            if (emails.indexOf(addr) !== -1 && emails.length != 0) {
-              continue;
-            }
-            emails.push(addr);
-          }
-        }
-      } else {
-        var roleTypes = [];
-        if ($('#emailUsersPopup input#authorRolePopup').prop('checked')) {
-          roleTypes.push('author')
-        }
-        if ($('#emailUsersPopup input#subRolePopup').prop('checked')) {
-          roleTypes.push('subscriber')
-        }
-        if ($('#emailUsersPopup input#conRolePopup').prop('checked')) {
-          roleTypes.push('editor')
-        }
-        if ($('#emailUsersPopup input#siteRolePopup').prop('checked')) {
-          roleTypes.push('site_owner')
-        }
-        if ($('#emailUsersPopup input#adminRolePopup').prop('checked')) {
-          roleTypes.push('administrator')
-        }
-        for (var i in userData.rows) {
-          var blog = userData.rows[i]
-          if (blogNames.indexOf(blog.id) == -1) {
-            continue;
-          }
-          var users = blog.value.users;
-          for (var j in users) {
-            var user = users[j]
-            if (roleTypes.indexOf(user.roles) === -1) {
-              continue
-            }
-            if (emails.indexOf(user.userEmail) !== -1 && emails.length != 0) {
-              continue;
-            }
-            emails.push(user.userEmail);
-          }
-        }
-      }
-      console.log('emails', emails.length);
-      addressStr = emails.join(', ');
-      $('#copyEmailBtn').attr('data-clipboard-text', addressStr);
-    }
   }
 
   // 2nd Table
@@ -977,7 +914,7 @@ jQuery(function($) {
         $('#sendEmailBtn').prop('disabled', false);
         $('#copyEmailBtn').removeClass('disabled');
       }
-      calEmails();
+      calEmails(blogNames);
     })
 
     $('#emailUsersPopup input[name="typeInSpe"]').change(function() {
@@ -988,7 +925,7 @@ jQuery(function($) {
         $('#sendEmailBtn').prop('disabled', false);
         $('#copyEmailBtn').removeClass('disabled');
       }
-      calEmails();
+      calEmails(blogNames);
     })
 
 
@@ -1001,7 +938,7 @@ jQuery(function($) {
       if (!$(this).hasClass('disabled')) {
         $('.copyAddressBtn').text('Copy addresses');
         if (addressStr === '') {
-          calEmails();
+          calEmails(blogNames);
         }
       }
     })
@@ -1013,65 +950,6 @@ jQuery(function($) {
         table.rows().deselect();
       }
     });
-
-    function calEmails() {
-      addressStr = '';
-      $('.copyAddressBtn').text('Copy addresses');
-      var emails = [];
-      if ($('#emailUsersPopup input#allRolesPopup').prop('checked')) {
-        for (var i in userData.rows) {
-          var blog = userData.rows[i]
-          if (blogNames.indexOf(blog.id) == -1) {
-            continue;
-          }
-          var users = blog.value.users;
-          for (var j in users) {
-            var addr = users[j].userEmail;
-            if (emails.indexOf(addr) !== -1 && emails.length != 0) {
-              continue;
-            }
-            emails.push(addr);
-          }
-        }
-      } else {
-        var roleTypes = [];
-        if ($('#emailUsersPopup input#authorRolePopup').prop('checked')) {
-          roleTypes.push('author')
-        }
-        if ($('#emailUsersPopup input#subRolePopup').prop('checked')) {
-          roleTypes.push('subscriber')
-        }
-        if ($('#emailUsersPopup input#conRolePopup').prop('checked')) {
-          roleTypes.push('editor')
-        }
-        if ($('#emailUsersPopup input#siteRolePopup').prop('checked')) {
-          roleTypes.push('site_owner')
-        }
-        if ($('#emailUsersPopup input#adminRolePopup').prop('checked')) {
-          roleTypes.push('administrator')
-        }
-        for (var i in userData.rows) {
-          var blog = userData.rows[i]
-          if (blogNames.indexOf(blog.id) == -1) {
-            continue;
-          }
-          var users = blog.value.users;
-          for (var j in users) {
-            var user = users[j]
-            if (roleTypes.indexOf(user.roles) === -1) {
-              continue
-            }
-            if (emails.indexOf(user.userEmail) !== -1 && emails.length != 0) {
-              continue;
-            }
-            emails.push(user.userEmail);
-          }
-        }
-      }
-      console.log('emails', emails.length);
-      addressStr = emails.join(', ');
-      $('#copyEmailBtn').attr('data-clipboard-text', addressStr);
-    }
   }
 
   // 3th Table
@@ -1276,7 +1154,7 @@ jQuery(function($) {
           $('#sendEmailBtn').prop('disabled', false);
           $('#copyEmailBtn').removeClass('disabled');
         }
-        calEmails();
+        calEmails(blogNames);
       })
 
       $('#emailUsersPopup input[name="typeInSpe"]').change(function() {
@@ -1287,7 +1165,7 @@ jQuery(function($) {
           $('#sendEmailBtn').prop('disabled', false);
           $('#copyEmailBtn').removeClass('disabled');
         }
-        calEmails();
+        calEmails(blogNames);
       })
 
 
@@ -1300,7 +1178,7 @@ jQuery(function($) {
         if (!$(this).hasClass('disabled')) {
           $('.copyAddressBtn').text('Copy addresses');
           if (addressStr === '') {
-            calEmails();
+            calEmails(blogNames);
           }
         }
       })
@@ -1313,64 +1191,6 @@ jQuery(function($) {
         }
       });
 
-      function calEmails() {
-        addressStr = '';
-        $('.copyAddressBtn').text('Copy addresses');
-        var emails = [];
-        if ($('#emailUsersPopup input#allRolesPopup').prop('checked')) {
-          for (var i in userData.rows) {
-            var blog = userData.rows[i]
-            if (blogNames.indexOf(blog.id) == -1) {
-              continue;
-            }
-            var users = blog.value.users;
-            for (var j in users) {
-              var addr = users[j].userEmail;
-              if (emails.indexOf(addr) !== -1 && emails.length != 0) {
-                continue;
-              }
-              emails.push(addr);
-            }
-          }
-        } else {
-          var roleTypes = [];
-          if ($('#emailUsersPopup input#authorRolePopup').prop('checked')) {
-            roleTypes.push('author')
-          }
-          if ($('#emailUsersPopup input#subRolePopup').prop('checked')) {
-            roleTypes.push('subscriber')
-          }
-          if ($('#emailUsersPopup input#conRolePopup').prop('checked')) {
-            roleTypes.push('editor')
-          }
-          if ($('#emailUsersPopup input#siteRolePopup').prop('checked')) {
-            roleTypes.push('site_owner')
-          }
-          if ($('#emailUsersPopup input#adminRolePopup').prop('checked')) {
-            roleTypes.push('administrator')
-          }
-          for (var i in userData.rows) {
-            var blog = userData.rows[i]
-            if (blogNames.indexOf(blog.id) == -1) {
-              continue;
-            }
-            var users = blog.value.users;
-            for (var j in users) {
-              var user = users[j]
-              if (roleTypes.indexOf(user.roles) === -1) {
-                continue
-              }
-              if (emails.indexOf(user.userEmail) !== -1 && emails.length != 0) {
-                continue;
-              }
-              emails.push(user.userEmail);
-            }
-          }
-        }
-        console.log('emails', emails.length);
-        addressStr = emails.join(', ');
-        $('#copyEmailBtn').attr('data-clipboard-text', addressStr);
-      }
     }
   }
 
@@ -1749,7 +1569,7 @@ jQuery(function($) {
           $('#sendEmailBtn').prop('disabled', false);
           $('#copyEmailBtn').removeClass('disabled');
         }
-        calEmails();
+        calEmails(blogNames);
       })
 
       $('#emailUsersPopup input[name="typeInSpe"]').change(function() {
@@ -1760,7 +1580,7 @@ jQuery(function($) {
           $('#sendEmailBtn').prop('disabled', false);
           $('#copyEmailBtn').removeClass('disabled');
         }
-        calEmails();
+        calEmails(blogNames);
       })
 
 
@@ -1773,7 +1593,7 @@ jQuery(function($) {
         if (!$(this).hasClass('disabled')) {
           $('.copyAddressBtn').text('Copy addresses');
           if (addressStr === '') {
-            calEmails();
+            calEmails(blogNames);
           }
         }
       })
@@ -1786,64 +1606,6 @@ jQuery(function($) {
         }
       });
 
-      function calEmails() {
-        addressStr = '';
-        $('.copyAddressBtn').text('Copy addresses');
-        var emails = [];
-        if ($('#emailUsersPopup input#allRolesPopup').prop('checked')) {
-          for (var i in userData.rows) {
-            var blog = userData.rows[i]
-            if (blogNames.indexOf(blog.id) == -1) {
-              continue;
-            }
-            var users = blog.value.users;
-            for (var j in users) {
-              var addr = users[j].userEmail;
-              if (emails.indexOf(addr) !== -1 && emails.length != 0) {
-                continue;
-              }
-              emails.push(addr);
-            }
-          }
-        } else {
-          var roleTypes = [];
-          if ($('#emailUsersPopup input#authorRolePopup').prop('checked')) {
-            roleTypes.push('author')
-          }
-          if ($('#emailUsersPopup input#subRolePopup').prop('checked')) {
-            roleTypes.push('subscriber')
-          }
-          if ($('#emailUsersPopup input#conRolePopup').prop('checked')) {
-            roleTypes.push('editor')
-          }
-          if ($('#emailUsersPopup input#siteRolePopup').prop('checked')) {
-            roleTypes.push('site_owner')
-          }
-          if ($('#emailUsersPopup input#adminRolePopup').prop('checked')) {
-            roleTypes.push('administrator')
-          }
-          for (var i in userData.rows) {
-            var blog = userData.rows[i]
-            if (blogNames.indexOf(blog.id) == -1) {
-              continue;
-            }
-            var users = blog.value.users;
-            for (var j in users) {
-              var user = users[j]
-              if (roleTypes.indexOf(user.roles) === -1) {
-                continue
-              }
-              if (emails.indexOf(user.userEmail) !== -1 && emails.length != 0) {
-                continue;
-              }
-              emails.push(user.userEmail);
-            }
-          }
-        }
-        console.log('emails', emails.length);
-        addressStr = emails.join(', ');
-        $('#copyEmailBtn').attr('data-clipboard-text', addressStr);
-      }
     }
   }
 
@@ -2343,6 +2105,64 @@ jQuery(function($) {
     $('#speRolesPopupGroup').hide();
   }
 
+  function calEmails(blogNames) {
+    addressStr = '';
+    $('.copyAddressBtn').text('Copy addresses');
+    var emails = [];
+    if ($('#emailUsersPopup input#allRolesPopup').prop('checked')) {
+      for (var i in userData.rows) {
+        var blog = userData.rows[i]
+        if (blogNames.indexOf(blog.id) == -1) {
+          continue;
+        }
+        var users = blog.value.users;
+        for (var j in users) {
+          var addr = users[j].userEmail;
+          if (emails.indexOf(addr) !== -1 && emails.length != 0) {
+            continue;
+          }
+          emails.push(addr);
+        }
+      }
+    } else {
+      var roleTypes = [];
+      if ($('#emailUsersPopup input#authorRolePopup').prop('checked')) {
+        roleTypes.push('author')
+      }
+      if ($('#emailUsersPopup input#subRolePopup').prop('checked')) {
+        roleTypes.push('subscriber')
+      }
+      if ($('#emailUsersPopup input#conRolePopup').prop('checked')) {
+        roleTypes.push('editor')
+      }
+      if ($('#emailUsersPopup input#siteRolePopup').prop('checked')) {
+        roleTypes.push('site_owner')
+      }
+      if ($('#emailUsersPopup input#adminRolePopup').prop('checked')) {
+        roleTypes.push('administrator')
+      }
+      for (var i in userData.rows) {
+        var blog = userData.rows[i]
+        if (blogNames.indexOf(blog.id) == -1) {
+          continue;
+        }
+        var users = blog.value.users;
+        for (var j in users) {
+          var user = users[j]
+          if (roleTypes.indexOf(user.roles) === -1) {
+            continue
+          }
+          if (emails.indexOf(user.userEmail) !== -1 && emails.length != 0) {
+            continue;
+          }
+          emails.push(user.userEmail);
+        }
+      }
+    }
+    console.log('emails', emails.length);
+    addressStr = emails.join(', ');
+    $('#copyEmailBtn').attr('data-clipboard-text', addressStr);
+  }
 
   function calTime(date, disTime) {
     var dateC = getTimeToDate(date);
